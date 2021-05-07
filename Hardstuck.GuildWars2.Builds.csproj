@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1;netstandard2.0</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>HardstuckGuild (MightyTeapot &amp; Plenyx)</Authors>
+    <Copyright>Apache 2</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Version>1.0.0</Version>
+    <RepositoryType>GitHub</RepositoryType>
+    <RepositoryUrl>https://github.com/HardstuckGuild/Hardstuck.GuildWars2.Builds</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/HardstuckGuild/Hardstuck.GuildWars2.Builds</PackageProjectUrl>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
