@@ -32,7 +32,7 @@ using (GW2BuildParser parser = new GW2BuildParser("My API key"))
 }
 ```
 
-### Note that `GW2BuildParser` implements `IDisposable`, henceforth `Dispose()` method or `using` statement is required to release resources held by the class.
+Note that `GW2BuildParser` implements `IDisposable`, henceforth `Dispose()` method or `using` statement is required to release resources held by the class.
 
 ---
 
