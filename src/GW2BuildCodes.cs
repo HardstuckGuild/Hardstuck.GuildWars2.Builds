@@ -191,89 +191,93 @@ namespace Hardstuck.GuildWars2.Builds
 
         public static async Task<APIBuild> GetBuildFromCode(string code)
         {
-            dynamic profData = await GW2API.ApiRequest("v2/professions", "id=Ranger&v=latest");
-            var palette = profData.skills_by_palette;
-            //byte[] bytes   = Convert.FromBase64String("DQQIBwAANzZ5AHgAqwEAALUApQEAALwA7QDtABg9AAEAAAAAAAAAAAAAAAA=");
-            byte[] bytes = Convert.FromBase64String(code);
 
-            APIBuild build = new APIBuild();
-
-            int profession = bytes[1];
-
-            build.Profession = new Profession() { relativeId = profession - 1 };
-
-            APIBuildSpecialization Spec1 = SpecializationFromBytes(bytes[2], bytes[3]);
-            APIBuildSpecialization Spec2 = SpecializationFromBytes(bytes[4], bytes[5]);
-            APIBuildSpecialization Spec3 = SpecializationFromBytes(bytes[6], bytes[7]);
-
-            build.Specializations = new List<APIBuildSpecialization>() { Spec1, Spec2, Spec3 };
-
-            APIBuildSkill HealSkillLand = SkillFromBytes(bytes[8], bytes[9], palette);
-            //APIBuildSkill HealSkillWater = SkillFromBytes(bytes[10], bytes[11], palette);
-            APIBuildSkill Utility1Land = SkillFromBytes(bytes[12], bytes[13], palette);
-            //APIBuildSkill Utility1Water  = SkillFromBytes(bytes[14], bytes[15], palette);
-            APIBuildSkill Utility2Land = SkillFromBytes(bytes[16], bytes[17], palette);
-            //APIBuildSkill Utility2Water  = SkillFromBytes(bytes[18], bytes[19], palette);
-            APIBuildSkill Utility3Land = SkillFromBytes(bytes[20], bytes[21], palette);
-            //APIBuildSkill Utility3Water  = SkillFromBytes(bytes[22], bytes[23], palette);
-            APIBuildSkill EliteLand = SkillFromBytes(bytes[24], bytes[25], palette);
-            //APIBuildSkill EliteWater     = SkillFromBytes(bytes[26], bytes[27], palette);
-
-            build.Skills.Heals = new List<APIBuildSkill>() { HealSkillLand };
-            build.Skills.Utilities = new List<APIBuildSkill>() { Utility1Land, Utility2Land, Utility3Land };
-            build.Skills.Elites = new List<APIBuildSkill>() { EliteLand };
-
-            if (profession == 3)
+            using (var api = new GW2Api())
             {
-                //Pets
-                int landPet1 = bytes[28];
-                int landPet2 = bytes[29];
-                //int waterPet1 = bytes[30];
-                //int waterPet2 = bytes[31];
+                dynamic profData = await api.Request("v2/professions", "id=Ranger&v=latest");
+                var palette = profData.skills_by_palette;
+                //byte[] bytes   = Convert.FromBase64String("DQQIBwAANzZ5AHgAqwEAALUApQEAALwA7QDtABg9AAEAAAAAAAAAAAAAAAA=");
+                byte[] bytes = Convert.FromBase64String(code);
 
-                build.Pets = new List<APIBuildPet>() { new APIBuildPet() { Id = landPet1 }, new APIBuildPet() { Id = landPet2 } };
-            }
-            else if (profession == 8)
-            {
-                //rev
-                int activeLegendLand = bytes[28];
-                int inactiveLegendLand = bytes[29];
-                //int activeLegendWater   = bytes[30];
-                //int inactiveLegendWater = bytes[31];
+                APIBuild build = new APIBuild();
 
-                APIBuildRevenantLegend Legend1 = APIBuildRevenantLegend.Parse(activeLegendLand.ToString());
-                APIBuildRevenantLegend Legend2 = APIBuildRevenantLegend.Parse(inactiveLegendLand.ToString());
+                int profession = bytes[1];
 
-                string legendQuery = "";
+                build.Profession = new Profession() { relativeId = profession - 1 };
 
-                if (Legend1 != null)
-                    legendQuery += $"{Legend1.Name},";
-                if (Legend2 != null)
-                    legendQuery += Legend2.Name;
+                APIBuildSpecialization Spec1 = SpecializationFromBytes(bytes[2], bytes[3]);
+                APIBuildSpecialization Spec2 = SpecializationFromBytes(bytes[4], bytes[5]);
+                APIBuildSpecialization Spec3 = SpecializationFromBytes(bytes[6], bytes[7]);
 
-                if (legendQuery != "")
+                build.Specializations = new List<APIBuildSpecialization>() { Spec1, Spec2, Spec3 };
+
+                APIBuildSkill HealSkillLand = SkillFromBytes(bytes[8], bytes[9], palette);
+                //APIBuildSkill HealSkillWater = SkillFromBytes(bytes[10], bytes[11], palette);
+                APIBuildSkill Utility1Land = SkillFromBytes(bytes[12], bytes[13], palette);
+                //APIBuildSkill Utility1Water  = SkillFromBytes(bytes[14], bytes[15], palette);
+                APIBuildSkill Utility2Land = SkillFromBytes(bytes[16], bytes[17], palette);
+                //APIBuildSkill Utility2Water  = SkillFromBytes(bytes[18], bytes[19], palette);
+                APIBuildSkill Utility3Land = SkillFromBytes(bytes[20], bytes[21], palette);
+                //APIBuildSkill Utility3Water  = SkillFromBytes(bytes[22], bytes[23], palette);
+                APIBuildSkill EliteLand = SkillFromBytes(bytes[24], bytes[25], palette);
+                //APIBuildSkill EliteWater     = SkillFromBytes(bytes[26], bytes[27], palette);
+
+                build.Skills.Heals = new List<APIBuildSkill>() { HealSkillLand };
+                build.Skills.Utilities = new List<APIBuildSkill>() { Utility1Land, Utility2Land, Utility3Land };
+                build.Skills.Elites = new List<APIBuildSkill>() { EliteLand };
+
+                if (profession == 3)
                 {
-                    legendQuery = $"ids={legendQuery}";
-                    dynamic legendData = await GW2API.ApiRequest("v2/legends", legendQuery);
+                    //Pets
+                    int landPet1 = bytes[28];
+                    int landPet2 = bytes[29];
+                    //int waterPet1 = bytes[30];
+                    //int waterPet2 = bytes[31];
 
-                    build.Skills.Heals = new List<APIBuildSkill>();
-                    build.Skills.Utilities = new List<APIBuildSkill>();
-                    build.Skills.Elites = new List<APIBuildSkill>();
+                    build.Pets = new List<APIBuildPet>() { new APIBuildPet() { Id = landPet1 }, new APIBuildPet() { Id = landPet2 } };
+                }
+                else if (profession == 8)
+                {
+                    //rev
+                    int activeLegendLand = bytes[28];
+                    int inactiveLegendLand = bytes[29];
+                    //int activeLegendWater   = bytes[30];
+                    //int inactiveLegendWater = bytes[31];
 
-                    for (int x = 0; x < legendData.Count; x++)
+                    APIBuildRevenantLegend Legend1 = APIBuildRevenantLegend.Parse(activeLegendLand.ToString());
+                    APIBuildRevenantLegend Legend2 = APIBuildRevenantLegend.Parse(inactiveLegendLand.ToString());
+
+                    string legendQuery = "";
+
+                    if (Legend1 != null)
+                        legendQuery += $"{Legend1.Name},";
+                    if (Legend2 != null)
+                        legendQuery += Legend2.Name;
+
+                    if (legendQuery != "")
                     {
-                        build.Skills.Heals.Add(new APIBuildSkill() { Id = (int)legendData[x].heal, PaletteId = PaletteIdFromReal((int)legendData[x].heal, palette), Type = "Heal" });
+                        legendQuery = $"ids={legendQuery}";
+                        dynamic legendData = await api.Request("v2/legends", legendQuery);
 
-                        build.Skills.Utilities.Add(new APIBuildSkill() { Id = (int)legendData[x].utilities[0], PaletteId = PaletteIdFromReal((int)legendData[x].utilities[0], palette), Type = "Slot" });
-                        build.Skills.Utilities.Add(new APIBuildSkill() { Id = (int)legendData[x].utilities[1], PaletteId = PaletteIdFromReal((int)legendData[x].utilities[1], palette), Type = "Slot" });
-                        build.Skills.Utilities.Add(new APIBuildSkill() { Id = (int)legendData[x].utilities[2], PaletteId = PaletteIdFromReal((int)legendData[x].utilities[2], palette), Type = "Slot" });
+                        build.Skills.Heals = new List<APIBuildSkill>();
+                        build.Skills.Utilities = new List<APIBuildSkill>();
+                        build.Skills.Elites = new List<APIBuildSkill>();
 
-                        build.Skills.Elites.Add(new APIBuildSkill() { Id = (int)legendData[x].elite, PaletteId = PaletteIdFromReal((int)legendData[x].elite, palette), Type = "Elite" });
+                        for (int x = 0; x < legendData.Count; x++)
+                        {
+                            build.Skills.Heals.Add(new APIBuildSkill() { Id = (int)legendData[x].heal, PaletteId = PaletteIdFromReal((int)legendData[x].heal, palette), Type = "Heal" });
+
+                            build.Skills.Utilities.Add(new APIBuildSkill() { Id = (int)legendData[x].utilities[0], PaletteId = PaletteIdFromReal((int)legendData[x].utilities[0], palette), Type = "Slot" });
+                            build.Skills.Utilities.Add(new APIBuildSkill() { Id = (int)legendData[x].utilities[1], PaletteId = PaletteIdFromReal((int)legendData[x].utilities[1], palette), Type = "Slot" });
+                            build.Skills.Utilities.Add(new APIBuildSkill() { Id = (int)legendData[x].utilities[2], PaletteId = PaletteIdFromReal((int)legendData[x].utilities[2], palette), Type = "Slot" });
+
+                            build.Skills.Elites.Add(new APIBuildSkill() { Id = (int)legendData[x].elite, PaletteId = PaletteIdFromReal((int)legendData[x].elite, palette), Type = "Elite" });
+                        }
                     }
                 }
-            }
 
-            return build;
+                return build;
+            }
         }
 
         public static async void GetGW2CodeFromBuild(APIBuild build)

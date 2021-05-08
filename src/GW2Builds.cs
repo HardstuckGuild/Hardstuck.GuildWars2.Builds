@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace Hardstuck.GuildWars2.Builds
 {
-    public static class GW2Builds
+    public class GW2Builds
     {
-        public static async Task<APIBuild> GetAPIBuild_VLATEST(string characterName, GW2GameMode mode)
+        private readonly GW2Api api = new GW2Api();
+
+        public async Task<APIBuild> GetAPIBuild_VLATEST(string characterName, GW2GameMode mode)
         {
 
             APIBuild APIBuild = new APIBuild()
@@ -21,13 +23,13 @@ namespace Hardstuck.GuildWars2.Builds
 
             string modestring = mode.ToString().ToLower();
 
-            dynamic APIData = await GW2API.ApiRequest($"v2/characters/{characterName}", "v=latest");
+            dynamic APIData = await api.Request($"v2/characters/{characterName}", "v=latest");
             dynamic ActiveBuild = APIData.build_tabs[(int)APIData.active_build_tab - 1].build;
             dynamic specializations = ActiveBuild.specializations;
 
-            dynamic allProfessions = (await GW2API.ApiRequest("v2/professions", "")).ToObject<List<string>>();
+            dynamic allProfessions = (await api.Request("v2/professions", "")).ToObject<List<string>>();
 
-            List<int> allStats = (await GW2API.ApiRequest("v2/itemstats", "")).ToObject<List<int>>();
+            List<int> allStats = (await api.Request("v2/itemstats", "")).ToObject<List<int>>();
             List<JObject> allStatData = new List<JObject>();
 
             int statCounter = 0;
@@ -45,7 +47,7 @@ namespace Hardstuck.GuildWars2.Builds
                     statCounter++;
                 }
 
-                dynamic statData = await GW2API.ApiRequest("v2/itemstats", statQuery);
+                dynamic statData = await api.Request("v2/itemstats", statQuery);
                 for (int x = 0; x < statData.Count; x++)
                 {
                     allStatData.Add(statData[x]);
@@ -78,7 +80,7 @@ namespace Hardstuck.GuildWars2.Builds
                 }
             }
 
-            APIBuild.Profession = (await GW2API.ApiRequest($"v2/professions/{APIData.profession}", "")).ToObject<Profession>();
+            APIBuild.Profession = (await api.Request($"v2/professions/{APIData.profession}", "")).ToObject<Profession>();
             APIBuild.Profession.relativeId = allProfessions.IndexOf(APIBuild.Profession.name);
 
             List<APIBuildTrait> allTraits = new List<APIBuildTrait>();
@@ -118,7 +120,7 @@ namespace Hardstuck.GuildWars2.Builds
                 APIBuild.Specializations.Add(spec);
             }
 
-            dynamic traitData = await GW2API.ApiRequest("v2/traits", traitQuery);
+            dynamic traitData = await api.Request("v2/traits", traitQuery);
 
             for (int x = 0; x < traitData.Count; x++)
                 allTraits[x].Position = (TraitPosition)traitData[x].order;
@@ -148,7 +150,7 @@ namespace Hardstuck.GuildWars2.Builds
                     legendQuery += $"{legend.Name},";
                 }
 
-                dynamic legendData = await GW2API.ApiRequest("v2/legends", legendQuery);
+                dynamic legendData = await api.Request("v2/legends", legendQuery);
 
                 for (int l = 0; l < legendData.Count; l++)
                 {
@@ -226,7 +228,7 @@ namespace Hardstuck.GuildWars2.Builds
                         weaponQuery += $"{weapons[x]["id"]},";
                 }
 
-                dynamic weaponData = await GW2API.ApiRequest("v2/items", weaponQuery);
+                dynamic weaponData = await api.Request("v2/items", weaponQuery);
 
                 for (int x = 0; x < weapons.Length; x++)
                 {
@@ -278,7 +280,7 @@ namespace Hardstuck.GuildWars2.Builds
                         weaponQuery += $"{weapons[x]["id"]},";
                 }
 
-                dynamic weaponData = await GW2API.ApiRequest("v2/items", weaponQuery);
+                dynamic weaponData = await api.Request("v2/items", weaponQuery);
 
                 for (int x = 0; x < weapons.Length; x++)
                 {
@@ -364,11 +366,11 @@ namespace Hardstuck.GuildWars2.Builds
                     }
                 }
 
-                string itemQuery = $"ids={string.Join(',', itemsToQuery.Values)}";
+                string itemQuery = $"ids={string.Join(",", itemsToQuery.Values)}";
 
                 dynamic loadedItems = new List<object>();
                 if (itemsToQuery.Keys.Count > 0)
-                    loadedItems = await GW2API.ApiRequest("v2/items", itemQuery);
+                    loadedItems = await api.Request("v2/items", itemQuery);
 
                 foreach (KeyValuePair<int, string> pair in itemsToQuery)
                 {
@@ -418,7 +420,7 @@ namespace Hardstuck.GuildWars2.Builds
             return APIBuild;
         }
 
-        public static async Task<APIBuild> GetAPIBuild(string characterName, GW2GameMode mode)
+        public async Task<APIBuild> GetAPIBuild(string characterName, GW2GameMode mode)
         {
 
             APIBuild APIBuild = new APIBuild()
@@ -429,12 +431,12 @@ namespace Hardstuck.GuildWars2.Builds
 
             string modestring = mode.ToString().ToLower();
 
-            dynamic APIData = await GW2API.ApiRequest($"v2/characters/{characterName}", "");
+            dynamic APIData = await api.Request($"v2/characters/{characterName}", "");
             dynamic specializations = APIData.specializations[modestring];
 
-            dynamic allProfessions = (await GW2API.ApiRequest("v2/professions", "")).ToObject<List<string>>();
+            dynamic allProfessions = (await api.Request("v2/professions", "")).ToObject<List<string>>();
 
-            List<int> allStats = (await GW2API.ApiRequest("v2/itemstats", "")).ToObject<List<int>>();
+            List<int> allStats = (await api.Request("v2/itemstats", "")).ToObject<List<int>>();
             List<JObject> allStatData = new List<JObject>();
 
             int statCounter = 0;
@@ -454,7 +456,7 @@ namespace Hardstuck.GuildWars2.Builds
                     statCounter++;
                 }
 
-                dynamic statData = await GW2API.ApiRequest("v2/itemstats", statQuery);
+                dynamic statData = await api.Request("v2/itemstats", statQuery);
                 for (int x = 0; x < statData.Count; x++)
                 {
                     allStatData.Add(statData[x]);
@@ -487,7 +489,7 @@ namespace Hardstuck.GuildWars2.Builds
                 }
             }
 
-            APIBuild.Profession = (await GW2API.ApiRequest($"v2/professions/{APIData.profession}", "")).ToObject<Profession>();
+            APIBuild.Profession = (await api.Request($"v2/professions/{APIData.profession}", "")).ToObject<Profession>();
             APIBuild.Profession.relativeId = allProfessions.IndexOf(APIBuild.Profession.name);
 
             List<APIBuildTrait> allTraits = new List<APIBuildTrait>();
@@ -527,7 +529,7 @@ namespace Hardstuck.GuildWars2.Builds
                 APIBuild.Specializations.Add(spec);
             }
 
-            dynamic traitData = await GW2API.ApiRequest("v2/traits", traitQuery);
+            dynamic traitData = await api.Request("v2/traits", traitQuery);
 
             for (int x = 0; x < traitData.Count; x++)
                 allTraits[x].Position = (TraitPosition)traitData[x].order;
@@ -557,7 +559,7 @@ namespace Hardstuck.GuildWars2.Builds
                     legendQuery += $"{legend.Name},";
                 }
 
-                dynamic legendData = await GW2API.ApiRequest("v2/legends", legendQuery);
+                dynamic legendData = await api.Request("v2/legends", legendQuery);
 
                 for (int l = 0; l < legendData.Count; l++)
                 {
@@ -635,7 +637,7 @@ namespace Hardstuck.GuildWars2.Builds
                         weaponQuery += $"{weapons[x]["id"]},";
                 }
 
-                dynamic weaponData = await GW2API.ApiRequest("v2/items", weaponQuery);
+                dynamic weaponData = await api.Request("v2/items", weaponQuery);
 
                 for (int x = 0; x < weapons.Length; x++)
                 {
@@ -687,7 +689,7 @@ namespace Hardstuck.GuildWars2.Builds
                         weaponQuery += $"{weapons[x]["id"]},";
                 }
 
-                dynamic weaponData = await GW2API.ApiRequest("v2/items", weaponQuery);
+                dynamic weaponData = await api.Request("v2/items", weaponQuery);
 
                 for (int x = 0; x < weapons.Length; x++)
                 {
@@ -773,11 +775,11 @@ namespace Hardstuck.GuildWars2.Builds
                     }
                 }
 
-                string itemQuery = $"ids={string.Join(',', itemsToQuery.Values)}";
+                string itemQuery = $"ids={string.Join(",", itemsToQuery.Values)}";
 
                 dynamic loadedItems = new List<object>();
                 if (itemsToQuery.Keys.Count > 0)
-                    loadedItems = await GW2API.ApiRequest("v2/items", itemQuery);
+                    loadedItems = await api.Request("v2/items", itemQuery);
 
                 foreach (KeyValuePair<int, string> pair in itemsToQuery)
                 {
@@ -825,6 +827,11 @@ namespace Hardstuck.GuildWars2.Builds
             }
 
             return APIBuild;
+        }
+
+        public void Dispose()
+        {
+            api?.Dispose();
         }
     }
 }
