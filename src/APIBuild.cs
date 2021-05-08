@@ -6,8 +6,8 @@ namespace Hardstuck.GuildWars2.Builds
     public class APIBuild
     {
         public string CharacterName { get; set; }
-        public GW2GameMode GameMode { get; set; }
-        public Profession Profession;
+        public GW2GameMode GameMode { get; set; } = GW2GameMode.PvE;
+        internal Profession Profession { get; set; }
         public List<APIBuildSpecialization> Specializations { get; set; } = new List<APIBuildSpecialization>();
         public APIBuildSkills Skills { get; set; } = new APIBuildSkills();
         public List<APIBuildPet> Pets { get; set; } = new List<APIBuildPet>();
@@ -79,7 +79,7 @@ namespace Hardstuck.GuildWars2.Builds
             List<int> relativeIds = new List<int>
             {
                 (int)GameMode,
-                Profession.relativeId
+                Profession.RelativeId
             };
 
             foreach (APIBuildSpecialization s in Specializations)
@@ -192,7 +192,7 @@ namespace Hardstuck.GuildWars2.Builds
                 }
             }
 
-            if (Profession.name == "Ranger")
+            if (Profession.Name == "Ranger")
             {
                 for (int x = 0; x < Pets.Count; x++)
                 {

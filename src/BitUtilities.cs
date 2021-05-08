@@ -1,6 +1,6 @@
 ﻿namespace Hardstuck.GuildWars2.Builds
 {
-    public static class BitUtilities
+    internal static class BitUtilities
     {
         public static bool[] ByteToBitArray(byte b)
         {

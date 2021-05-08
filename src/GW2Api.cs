@@ -23,16 +23,21 @@ namespace Hardstuck.GuildWars2.Builds
         private static readonly string basePoint = "https://api.guildwars2.com/";
         private readonly HttpClient httpClient = new HttpClient();
 
-        internal GW2Api()
-        {
-
-        }
+        internal GW2Api() { }
 
         internal async Task<dynamic> Request(string endpoint, string query)
         {
-            using (var response = await httpClient.GetAsync($"{basePoint}{endpoint}?{query}"))
+            using (HttpResponseMessage response = await httpClient.GetAsync($"{basePoint}{endpoint}?{query}"))
             {
                 return JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        internal async Task<T> Request<T>(string endpoint, string query)
+        {
+            using (HttpResponseMessage response = await httpClient.GetAsync($"{basePoint}{endpoint}?{query}"))
+            {
+                return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
             }
         }
 

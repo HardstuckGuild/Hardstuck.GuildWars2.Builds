@@ -1,18 +1,29 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Hardstuck.GuildWars2.Builds
 {
-    public class Profession
+    internal class Profession
     {
-        public int relativeId;
-        public string name;
-        public string icon;
-        public string icon_big;
-        public int[] specializations;
-        public JObject weapons;
-        public JArray skills;
+        public int RelativeId { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("icon")]
+        public string Icon { get; set; }
+
+        [JsonProperty("icon_big")]
+        public string IconBig { get; set; }
+
+        [JsonProperty("specializations")]
+        public List<int> Specializations { get; set; }
+
+        [JsonProperty("weapons")]
+        internal JObject Weapons { get; set; }
+
+        [JsonProperty("skills")]
+        internal List<APIClasses.ProfessionSkill> Skills { get; set; }
     }
 }
