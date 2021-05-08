@@ -25,14 +25,6 @@ namespace Hardstuck.GuildWars2.Builds
 
         internal GW2Api() { }
 
-        internal async Task<dynamic> Request(string endpoint, string query)
-        {
-            using (HttpResponseMessage response = await httpClient.GetAsync($"{basePoint}{endpoint}?{query}"))
-            {
-                return JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
-            }
-        }
-
         internal async Task<T> Request<T>(string endpoint, string query)
         {
             using (HttpResponseMessage response = await httpClient.GetAsync($"{basePoint}{endpoint}?{query}"))

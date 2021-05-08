@@ -18,7 +18,7 @@ namespace Hardstuck.GuildWars2.Builds
         public string IconBig { get; set; }
 
         [JsonProperty("specializations")]
-        public List<int> Specializations { get; set; }
+        internal List<int> Specializations { get; set; }
 
         [JsonProperty("weapons")]
         internal JObject Weapons { get; set; }

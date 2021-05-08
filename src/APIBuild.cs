@@ -6,12 +6,15 @@ namespace Hardstuck.GuildWars2.Builds
     public class APIBuild
     {
         public string CharacterName { get; set; }
-        public GW2GameMode GameMode { get; set; } = GW2GameMode.PvE;
-        internal Profession Profession { get; set; }
+        public GW2GameMode GameMode { get; set; }
+        public string Profession { get; set; }
+        internal Profession ProfessionData { get; set; }
         public List<APIBuildSpecialization> Specializations { get; set; } = new List<APIBuildSpecialization>();
         public APIBuildSkills Skills { get; set; } = new APIBuildSkills();
         public List<APIBuildPet> Pets { get; set; } = new List<APIBuildPet>();
         public APIBuildEquipment Equipment { get; set; } = new APIBuildEquipment();
+
+        internal APIBuild() { }
 
         public static string Letterize(int[] stuff)
         {
@@ -33,7 +36,7 @@ namespace Hardstuck.GuildWars2.Builds
             return result;
         }
 
-        public static int AlphaToInt(char alpha)
+        private static int AlphaToInt(char alpha)
         {
             int result = alpha - 97;
             if (result < 0)
@@ -42,7 +45,7 @@ namespace Hardstuck.GuildWars2.Builds
             return result;
         }
 
-        public static int[] Deletterize(string code)
+        private static int[] Deletterize(string code)
         {
             List<int> result = new List<int>();
             char[] letters = code.ToCharArray();
@@ -79,7 +82,7 @@ namespace Hardstuck.GuildWars2.Builds
             List<int> relativeIds = new List<int>
             {
                 (int)GameMode,
-                Profession.RelativeId
+                ProfessionData.RelativeId
             };
 
             foreach (APIBuildSpecialization s in Specializations)
@@ -192,12 +195,14 @@ namespace Hardstuck.GuildWars2.Builds
                 }
             }
 
-            if (Profession.Name == "Ranger")
+            if (ProfessionData.Name == "Ranger")
             {
                 for (int x = 0; x < Pets.Count; x++)
                 {
                     if (Pets[x] != null)
+                    {
                         relativeIds.Add(Pets[x].Id);
+                    }
                 }
             }
 
