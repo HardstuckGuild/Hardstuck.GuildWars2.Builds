@@ -3,20 +3,51 @@ using System.Collections.Generic;
 
 namespace Hardstuck.GuildWars2.Builds
 {
+    /// <summary>
+    /// A class representing the build gathered from the API
+    /// </summary>
     public class APIBuild
     {
+        /// <summary>
+        /// Name of the character
+        /// </summary>
         public string CharacterName { get; set; }
+
+        /// <summary>
+        /// Game mode of the build
+        /// </summary>
         public GW2GameMode GameMode { get; set; }
+
+        /// <summary>
+        /// Profession name
+        /// </summary>
         public string Profession { get; set; }
-        internal Profession ProfessionData { get; set; }
+
+        /// <summary>
+        /// Currently equipped specializations on the character
+        /// </summary>
         public List<APIBuildSpecialization> Specializations { get; set; } = new List<APIBuildSpecialization>();
+
+        /// <summary>
+        /// Currently equipped skills on the character
+        /// </summary>
         public APIBuildSkills Skills { get; set; } = new APIBuildSkills();
+
+        /// <summary>
+        /// Currently equipped pets
+        /// </summary>
         public List<APIBuildPet> Pets { get; set; } = new List<APIBuildPet>();
+
+        /// <summary>
+        /// Currently equipped pieces of equipment
+        /// </summary>
         public APIBuildEquipment Equipment { get; set; } = new APIBuildEquipment();
+
+        internal Profession ProfessionData { get; set; }
 
         internal APIBuild() { }
 
-        public static string Letterize(int[] stuff)
+        internal static string Letterize(int[] stuff)
         {
             string result = "";
             for (int x = 0; x < stuff.Length; x++)
@@ -36,7 +67,7 @@ namespace Hardstuck.GuildWars2.Builds
             return result;
         }
 
-        private static int AlphaToInt(char alpha)
+        internal static int AlphaToInt(char alpha)
         {
             int result = alpha - 97;
             if (result < 0)
@@ -45,7 +76,7 @@ namespace Hardstuck.GuildWars2.Builds
             return result;
         }
 
-        private static int[] Deletterize(string code)
+        internal static int[] Deletterize(string code)
         {
             List<int> result = new List<int>();
             char[] letters = code.ToCharArray();
@@ -77,6 +108,10 @@ namespace Hardstuck.GuildWars2.Builds
             return result.ToArray();
         }
 
+        /// <summary>
+        /// Get the build code for the build
+        /// </summary>
+        /// <returns>Hardstuck Builds code</returns>
         public string GetBuildCode()
         {
             List<int> relativeIds = new List<int>

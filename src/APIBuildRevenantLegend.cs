@@ -4,10 +4,24 @@ using System.Linq;
 
 namespace Hardstuck.GuildWars2.Builds
 {
+    /// <summary>
+    /// Revent legend in a build
+    /// </summary>
     public class APIBuildRevenantLegend
     {
+        /// <summary>
+        /// Id of the legend
+        /// </summary>
         public int Id { get; private set; }
+
+        /// <summary>
+        /// Relative id of the legend
+        /// </summary>
         public int RelativeId { get; private set; }
+
+        /// <summary>
+        /// Name of the legend
+        /// </summary>
         public string Name { get; private set; }
 
         //Water / Legend2        -> Shiro
@@ -17,7 +31,7 @@ namespace Hardstuck.GuildWars2.Builds
         //Deathshroud / Legend6  -> Ventari
         //null        / Legend5  -> Kalla (lol) rev
 
-        readonly static Dictionary<object, Tuple<string, int>> LegendDictionary = new Dictionary<object, Tuple<string, int>>()
+        private readonly static Dictionary<object, Tuple<string, int>> LegendDictionary = new Dictionary<object, Tuple<string, int>>()
         {
             { "Fire"       , new Tuple<string, int>("Legend1", 1) },
             { "Water"      , new Tuple<string, int>("Legend2", 2) },
@@ -27,6 +41,11 @@ namespace Hardstuck.GuildWars2.Builds
             { "Deathshroud", new Tuple<string, int>("Legend6", 6) }
         };
 
+        /// <summary>
+        /// Parse a text input representing a revenant legend
+        /// </summary>
+        /// <param name="input">an input representing a revenant legend</param>
+        /// <returns>parsed revenant legend</returns>
         public static APIBuildRevenantLegend Parse(string input)
         {
             if (input == null)
@@ -60,7 +79,7 @@ namespace Hardstuck.GuildWars2.Builds
             return null;
         }
 
-        public APIBuildRevenantLegend()
+        internal APIBuildRevenantLegend()
         {
 
         }

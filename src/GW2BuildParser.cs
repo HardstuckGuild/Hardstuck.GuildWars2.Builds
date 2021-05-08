@@ -1,28 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Hardstuck.GuildWars2.Builds
 {
-    public class GW2Builds : IDisposable
+    /// <summary>
+    /// GW2Build class handles getting the current build from the API.
+    /// </summary>
+    public class GW2BuildParser : IDisposable
     {
         private readonly GW2Api api;
 
-        public GW2Builds(string apiKey)
+        /// <summary>
+        /// Create GW2Build class with the specified apiKey.
+        /// </summary>
+        /// <param name="apiKey">API key</param>
+        public GW2BuildParser(string apiKey)
         {
             api = new GW2Api() { ApiKey = apiKey };
         }
 
+        /// <summary>
+        /// Gets the information about the exact build a given character in a given game mode is running.
+        /// </summary>
+        /// <param name="characterName">name of the character</param>
+        /// <param name="mode">given game mode</param>
+        /// <returns>information about the exact build a given character in a given game mode</returns>
         public async Task<APIBuild> GetAPIBuildAsync(string characterName, GW2GameMode mode)
         {
-
             APIBuild APIBuild = new APIBuild()
             {
                 CharacterName = characterName,
                 GameMode = mode
             };
-
 
             string modestring = Enum.GetName(typeof(GW2GameMode), mode).ToLower();
 
@@ -41,17 +53,17 @@ namespace Hardstuck.GuildWars2.Builds
             //TODO download this on launch instead of every time
             while (statCounter < allStats.Count)
             {
-                string statQuery = "ids=";
+                StringBuilder statQuery = new StringBuilder("ids=");
 
                 while (queryCounter < 100 && statCounter < allStats.Count)
                 {
-                    statQuery += $"{allStats[statCounter]},";
+                    statQuery.Append($"{allStats[statCounter]},");
 
                     queryCounter++;
                     statCounter++;
                 }
 
-                List<APIClasses.ItemStats> statData = await api.Request<List<APIClasses.ItemStats>>("v2/itemstats", statQuery);
+                List<APIClasses.ItemStats> statData = await api.Request<List<APIClasses.ItemStats>>("v2/itemstats", statQuery.ToString());
                 allStatData.AddRange(statData);
 
                 queryCounter = 0;
@@ -87,7 +99,7 @@ namespace Hardstuck.GuildWars2.Builds
 
             List<APIBuildTrait> allTraits = new List<APIBuildTrait>();
 
-            string traitQuery = "ids=";
+            StringBuilder traitQuery = new StringBuilder("ids=");
 
             for (int x = 0; x < specializations.Count; x++)
             {
@@ -105,7 +117,7 @@ namespace Hardstuck.GuildWars2.Builds
                         {
                             Id = (int)specializations[x].Traits[t]
                         };
-                        traitQuery += $"{trait.Id},";
+                        traitQuery.Append($"{trait.Id},");
                     }
                     else
                     {
@@ -122,7 +134,7 @@ namespace Hardstuck.GuildWars2.Builds
                 APIBuild.Specializations.Add(spec);
             }
 
-            List<APIClasses.Trait> traitData = await api.Request<List<APIClasses.Trait>>("v2/traits", traitQuery);
+            List<APIClasses.Trait> traitData = await api.Request<List<APIClasses.Trait>>("v2/traits", traitQuery.ToString());
 
             for (int x = 0; x < traitData.Count; x++)
             {
@@ -147,14 +159,14 @@ namespace Hardstuck.GuildWars2.Builds
 
             if (APIBuild.ProfessionData.Name == "Revenant")
             {
-                string legendQuery = "ids=";
+                StringBuilder legendQuery = new StringBuilder("ids=");
                 for (int l = 0; l < skills.Legends.Count; l++)
                 {
                     APIBuildRevenantLegend legend = APIBuildRevenantLegend.Parse(skills.Legends[l].ToString());
-                    legendQuery += $"{legend.Name},";
+                    legendQuery.Append($"{legend.Name},");
                 }
 
-                List<APIClasses.Legend> legendData = await api.Request<List<APIClasses.Legend>>("v2/legends", legendQuery);
+                List<APIClasses.Legend> legendData = await api.Request<List<APIClasses.Legend>>("v2/legends", legendQuery.ToString());
 
                 for (int l = 0; l < legendData.Count; l++)
                 {
@@ -210,9 +222,13 @@ namespace Hardstuck.GuildWars2.Builds
                 for (int x = 0; x < apiEquipmentPvP.Sigils.Count; x++)
                 {
                     if (apiEquipmentPvP.Sigils[x] != null)
+                    {
                         equipment.Sigils[x] = (int)apiEquipmentPvP.Sigils[x];
+                    }
                     else
+                    {
                         equipment.Sigils[x] = 0;
+                    }
                 }
 
                 List<APIClasses.CharacterEquipment> apiEquipment = APIData.Equipment;
@@ -232,17 +248,17 @@ namespace Hardstuck.GuildWars2.Builds
 
                 var weapons = new List<APIClasses.CharacterEquipment>() { weaponA1, weaponA2, weaponB1, weaponB2 };
 
-                string weaponQuery = "ids=";
+                StringBuilder weaponQuery = new StringBuilder("ids=");
 
                 for (int x = 0; x < weapons.Count; x++)
                 {
                     if (weapons[x] != null)
                     {
-                        weaponQuery += $"{weapons[x].Id},";
+                        weaponQuery.Append($"{weapons[x].Id},");
                     }
                 }
 
-                List<APIClasses.Item> weaponData = await api.Request<List<APIClasses.Item>>("v2/items", weaponQuery);
+                List<APIClasses.Item> weaponData = await api.Request<List<APIClasses.Item>>("v2/items", weaponQuery.ToString());
 
                 for (int x = 0; x < weapons.Count; x++)
                 {
@@ -296,15 +312,17 @@ namespace Hardstuck.GuildWars2.Builds
 
                 var weapons = new List<APIClasses.CharacterEquipment>() { weaponA1, weaponA2, weaponB1, weaponB2 };
 
-                string weaponQuery = "ids=";
+                StringBuilder weaponQuery = new StringBuilder("ids=");
 
                 for (int x = 0; x < weapons.Count; x++)
                 {
                     if (weapons[x] != null)
-                        weaponQuery += $"{weapons[x].Id},";
+                    {
+                        weaponQuery.Append($"{weapons[x].Id},");
+                    }
                 }
 
-                List<APIClasses.Item> weaponData = await api.Request<List<APIClasses.Item>>("v2/items", weaponQuery);
+                List<APIClasses.Item> weaponData = await api.Request<List<APIClasses.Item>>("v2/items", weaponQuery.ToString());
 
                 for (int x = 0; x < weapons.Count; x++)
                 {
@@ -321,7 +339,9 @@ namespace Hardstuck.GuildWars2.Builds
                         foreach (var w in APIBuild.ProfessionData.Weapons)
                         {
                             if (w.Key == weapon.Type.ToString())
+                            {
                                 weapon.RelativeId = wIndex;
+                            }
                             wIndex++;
                         }
 
@@ -379,9 +399,13 @@ namespace Hardstuck.GuildWars2.Builds
                         int indexOf;
 
                         if ((indexOf = Armor.IndexOf(item.Slot)) != -1)
+                        {
                             equipment.Armor[indexOf] = item;
+                        }
                         else if ((indexOf = Trinkets.IndexOf(item.Slot)) != -1)
+                        {
                             equipment.Trinkets[indexOf] = item;
+                        }
                         else
                         {
                             APIBuildWeapon weapon = equipment.Weapons[Weapons.IndexOf(item.Slot)];
@@ -426,12 +450,20 @@ namespace Hardstuck.GuildWars2.Builds
                 }
 
                 foreach (APIBuildItem i in equipment.Armor)
+                {
                     if (i != null && i.Upgrades.Length > 0)
+                    {
                         equipment.Runes.Add(i.Upgrades[0]);
+                    }
+                }
 
                 foreach (APIBuildItem i in equipment.Weapons)
+                {
                     if (i != null && i.Upgrades.Length > 0)
+                    {
                         equipment.Sigils.AddRange(i.Upgrades);
+                    }
+                }
 
                 if (APIBuild.ProfessionData.Name == "Ranger")
                 {
@@ -448,6 +480,9 @@ namespace Hardstuck.GuildWars2.Builds
             return APIBuild;
         }
 
+        /// <summary>
+        /// Dispose of all resoruces held by the class.
+        /// </summary>
         public void Dispose()
         {
             api?.Dispose();
