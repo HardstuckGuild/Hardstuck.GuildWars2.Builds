@@ -168,6 +168,17 @@ namespace Hardstuck.GuildWars2.Builds
 
                 List<APIClasses.Legend> legendData = await api.Request<List<APIClasses.Legend>>("v2/legends", legendQuery.ToString());
 
+                if (skills.Legends.Count == 1)
+                {
+                    //the api is doing a thing, construct the second legend from the skills.heal skills.util skills.elite stuff
+                    legendData.Add(new APIClasses.Legend()
+                    {
+                        Heal      = skills.Heal,
+                        Utilities = skills.Utilities.Where(i => i.HasValue).Select(i => i.Value).ToList(),
+                        Elite     = skills.Elite
+                    });
+                }
+
                 for (int l = 0; l < legendData.Count; l++)
                 {
                     APIBuild.Skills.Heals.Add(new APIBuildSkill()
