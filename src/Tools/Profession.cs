@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
-namespace Hardstuck.GuildWars2.Builds
+namespace Hardstuck.GuildWars2.Builds.Tools
 {
     internal class Profession
     {
