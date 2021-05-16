@@ -60,7 +60,7 @@ Additionally, `GW2BuildParser` can throw an exception of type `NotEnoughPermissi
 ### Example method to extract the build code with `using` statement:
 
 ```csharp
-private async Task<string> GetBuild(string apiKey, string characterName, GW2GameMode gameMode)
+private async Task<string> GetBuildAsync(string apiKey, string characterName, GW2GameMode gameMode)
 {
     try
     {
@@ -80,7 +80,7 @@ private async Task<string> GetBuild(string apiKey, string characterName, GW2Game
 ### Alternative way with `Dispose()`:
 
 ```csharp
-private async Task<string> GetBuild(string apiKey, string characterName, GW2GameMode gameMode)
+private async Task<string> GetBuildAsync(string apiKey, string characterName, GW2GameMode gameMode)
 {
     try
     {
