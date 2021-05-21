@@ -25,26 +25,54 @@ using Hardstuck.GuildWars2.Builds;
 ### Quickly generate a build code:
 
 ```csharp
-using (GW2BuildParser parser = new GW2BuildParser("My API key"))
+try
 {
-    APIBuild build = await parser.GetAPIBuildAsync("My Amazing Character", GW2GameMode.PvE);
-    Console.WriteLine(build.GetBuildCode());
+    using (GW2BuildParser parser = new GW2BuildParser("My API key"))
+    {
+        APIBuild build = await parser.GetAPIBuildAsync("My Amazing Character", GW2GameMode.PvE);
+        Console.WriteLine(build.GetBuildCode());
+    }
+}
+catch (NotEnoughPermissionsException e)
+{
+    Console.Write($"The API request failed due to low API key permissions, main reason: ");
+    switch(e.MissingPermission)
+    {
+        case NotEnoughPermissionsReason.Characters:
+            Console.WriteLine("the API key is missing \"characters\" permission");
+            break;
+        case NotEnoughPermissionsReason.Builds:
+            Console.WriteLine("the API key is missing \"builds\" permission");
+            break;
+        default:
+            Console.WriteLine("the API key is invalid");
+            break;
+    }
 }
 ```
 
 Note that `GW2BuildParser` implements `IDisposable`, henceforth `Dispose()` method or `using` statement is required to release resources held by the class.
+
+Additionally, `GW2BuildParser` can throw an exception of type `NotEnoughPermissionsException`, which should be properly handled. You can use a second optional parameter for the `GW2BuildParser` constructor to disable API key check.
 
 ---
 
 ### Example method to extract the build code with `using` statement:
 
 ```csharp
-private async Task<string> GetBuild(string apiKey, string characterName, GW2GameMode gameMode)
+private async Task<string> GetBuildAsync(string apiKey, string characterName, GW2GameMode gameMode)
 {
-    using (GW2BuildParser parser = new GW2BuildParser(apiKey))
+    try
     {
-        APIBuild build = await parser.GetAPIBuildAsync(characterName, gameMode);
-        return build.GetBuildCode();
+        using (GW2BuildParser parser = new GW2BuildParser(apiKey))
+        {
+            APIBuild build = await parser.GetAPIBuildAsync(characterName, gameMode);
+            return build.GetBuildCode();
+        }
+    }
+    catch (NotEnoughPermissionsException e)
+    {
+        throw;
     }
 }
 ```
@@ -52,14 +80,21 @@ private async Task<string> GetBuild(string apiKey, string characterName, GW2Game
 ### Alternative way with `Dispose()`:
 
 ```csharp
-private async Task<string> GetBuild(string apiKey, string characterName, GW2GameMode gameMode)
+private async Task<string> GetBuildAsync(string apiKey, string characterName, GW2GameMode gameMode)
 {
-    GW2BuildParser parser = new GW2BuildParser(apiKey);
+    try
+    {
+        GW2BuildParser parser = new GW2BuildParser(apiKey);
 
-    APIBuild build = await parser.GetAPIBuildAsync(characterName, gameMode);
+        APIBuild build = await parser.GetAPIBuildAsync(characterName, gameMode);
 
-    parser.Dispose();
+        parser.Dispose();
 
-    return build.GetBuildCode();
+        return build.GetBuildCode();
+    }
+    catch (NotEnoughPermissionsException e)
+    {
+        throw;
+    }
 }
 ```

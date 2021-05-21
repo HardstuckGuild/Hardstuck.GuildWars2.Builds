@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hardstuck.GuildWars2.Builds.Tools;
+using System;
 using System.Collections.Generic;
 
 namespace Hardstuck.GuildWars2.Builds
@@ -51,6 +52,7 @@ namespace Hardstuck.GuildWars2.Builds
         {
             string result = "";
             for (int x = 0; x < stuff.Length; x++)
+            {
                 if (stuff[x] > 2652)
                 {
                     int squaredQuotient = Math.DivRem(stuff[x] - 2653, 2653, out int squaredRemainder);
@@ -58,22 +60,25 @@ namespace Hardstuck.GuildWars2.Builds
                     result += "_" + Letterize(new int[] { squaredQuotient, remainderQuotient, remainderRemainder });
                 }
                 else if (stuff[x] > 51)
+                {
                     result += "-" + Letterize(new int[] { (int)Math.Floor((stuff[x] - 52) / 52d), stuff[x] % 52 });
+                }
                 else if (stuff[x] > 25)
+                {
                     result += ((char)(65 + stuff[x] - 26)).ToString();
+                }
                 else
+                {
                     result += ((char)(97 + stuff[x])).ToString();
-
+                }
+            }
             return result;
         }
 
         internal static int AlphaToInt(char alpha)
         {
             int result = alpha - 97;
-            if (result < 0)
-                result += 58;
-
-            return result;
+            return (result < 0) ? result + 58 : result;
         }
 
         internal static int[] Deletterize(string code)
@@ -104,7 +109,6 @@ namespace Hardstuck.GuildWars2.Builds
                     result.Add(AlphaToInt(letters[x]));
                 }
             }
-
             return result.ToArray();
         }
 
@@ -124,24 +128,31 @@ namespace Hardstuck.GuildWars2.Builds
             {
                 relativeIds.Add(s.RelativeId);
                 foreach (APIBuildTrait t in s.Traits)
+                {
                     relativeIds.Add((int)t.Position);
+                }
             }
 
             foreach (APIBuildSkill s in Skills.Heals)
+            {
                 relativeIds.Add(s.RelativeId);
+            }
 
             foreach (APIBuildSkill s in Skills.Utilities)
+            {
                 relativeIds.Add(s.RelativeId);
+            }
 
             foreach (APIBuildSkill s in Skills.Elites)
+            {
                 relativeIds.Add(s.RelativeId);
+            }
 
             if (Equipment.GetType() == typeof(APIBuildPvEEquipment))
             {
                 APIBuildPvEEquipment PvEEquipment = Equipment as APIBuildPvEEquipment;
                 AttributeType curStat = null;
                 int curStatCounter = 0;
-
 
                 foreach (APIBuildWeapon w in PvEEquipment.Weapons)
                 {
@@ -164,9 +175,9 @@ namespace Hardstuck.GuildWars2.Builds
                         if (i.AttributeType.Name != curStat.Name)
                         {
                             if (curStatCounter > 0)
+                            {
                                 relativeIds.Add(curStatCounter);
-
-                            //MightyTeabot.MainForm.Log(curStatCounter + " pieces of " + curStat.Name);
+                            }
 
                             curStatCounter = 0;
                             relativeIds.Add(i.AttributeType.Id);
@@ -178,7 +189,6 @@ namespace Hardstuck.GuildWars2.Builds
 
                 if (curStatCounter > 0)
                 {
-                    //MightyTeabot.MainForm.Log(curStatCounter + " pieces of " + curStat.Name);
                     relativeIds.Add(curStatCounter);
                 }
 
@@ -196,7 +206,9 @@ namespace Hardstuck.GuildWars2.Builds
                     if (r != curRune)
                     {
                         if (curRuneCounter > 0)
+                        {
                             relativeIds.Add(curRuneCounter);
+                        }
 
                         curRuneCounter = 0;
                         relativeIds.Add(r);
@@ -206,7 +218,9 @@ namespace Hardstuck.GuildWars2.Builds
                 }
 
                 if (curRuneCounter > 0)
+                {
                     relativeIds.Add(curRuneCounter);
+                }
 
                 relativeIds.AddRange(PvEEquipment.Sigils);
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hardstuck.GuildWars2.Builds.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,12 +15,21 @@ namespace Hardstuck.GuildWars2.Builds
         private readonly GW2Api api;
 
         /// <summary>
-        /// Create GW2Build class with the specified apiKey.
+        /// Create GW2Build class with the specified API key and check for API key permissions.
         /// </summary>
         /// <param name="apiKey">API key</param>
-        public GW2BuildParser(string apiKey)
+        /// <param name="checkPerms">Whether to check perms and raise an error if the key has not enough permissions</param>
+        /// <exception cref="NotEnoughPermissionsException">Thrown when an error is raise by missing key permissions.</exception>
+        public GW2BuildParser(string apiKey, bool checkPerms = true)
         {
-            api = new GW2Api() { ApiKey = apiKey };
+            try
+            {
+                api = new GW2Api(apiKey, checkPerms);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -38,12 +48,12 @@ namespace Hardstuck.GuildWars2.Builds
 
             string modestring = Enum.GetName(typeof(GW2GameMode), mode).ToLower();
 
-            APIClasses.Character APIData = await api.Request<APIClasses.Character>($"v2/characters/{characterName}", "");
+            APIClasses.Character APIData = await api.Request<APIClasses.Character>($"v2/characters/{characterName}");
             List<APIClasses.CharacterSpecialization> specializations = APIData.Specializations[modestring];
 
-            List<string> allProfessions = await api.Request<List<string>>("v2/professions", "");
+            List<string> allProfessions = await api.Request<List<string>>("v2/professions");
 
-            List<int> allStats = await api.Request<List<int>>("v2/itemstats", "");
+            List<int> allStats = await api.Request<List<int>>("v2/itemstats");
             List<APIClasses.ItemStats> allStatData = new List<APIClasses.ItemStats>();
 
             int statCounter = 0;
@@ -93,7 +103,7 @@ namespace Hardstuck.GuildWars2.Builds
                 }
             }
 
-            APIBuild.ProfessionData = await api.Request<Profession>($"v2/professions/{APIData.Profession}", "");
+            APIBuild.ProfessionData = await api.Request<Profession>($"v2/professions/{APIData.Profession}");
             APIBuild.Profession = APIBuild.ProfessionData.Name;
             APIBuild.ProfessionData.RelativeId = allProfessions.IndexOf(APIBuild.ProfessionData.Name);
 
