@@ -170,7 +170,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                 if (skills.Legends.Count == 1)
                 {
-                    //the api is doing a thing, construct the second legend from the skills.heal skills.util skills.elite stuff
+                    //the api is doing a thing, construct the first (currently equipped) legend from the skills.heal skills.util skills.elite stuff
                     legendData.Add(new APIClasses.Legend()
                     {
                         Heal      = skills.Heal,
