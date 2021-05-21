@@ -52,9 +52,9 @@ namespace Hardstuck.GuildWars2.Builds
         {
             string result = "";
             for (int x = 0; x < stuff.Length; x++)
-                if (stuff[x] > 2601)
+                if (stuff[x] > 2704)
                 {
-                    int squaredQuotient = Math.DivRem(stuff[x] - 2602, 2602, out int squaredRemainder);
+                    int squaredQuotient = Math.DivRem(stuff[x] - 2704, 2704, out int squaredRemainder);
                     int remainderQuotient = Math.DivRem(squaredRemainder, 52, out int remainderRemainder);
                     result += "_" + Letterize(new int[] { squaredQuotient, remainderQuotient, remainderRemainder });
                 }
@@ -74,7 +74,7 @@ namespace Hardstuck.GuildWars2.Builds
             return (result < 0) ? result + 58 : result;
         }
 
-        internal static int[] Deletterize(string code)
+        public static int[] Deletterize(string code)
         {
             List<int> result = new List<int>();
             char[] letters = code.ToCharArray();
@@ -87,7 +87,7 @@ namespace Hardstuck.GuildWars2.Builds
                     int squaredQuotient    = AlphaToInt(letters[x + 1]);
                     int remainderQuotient  = AlphaToInt(letters[x + 2]);
                     int remainderRemainder = AlphaToInt(letters[x + 3]);
-                    result.Add((squaredQuotient + 1) * 2602 + remainderQuotient * 52 + remainderRemainder);
+                    result.Add((squaredQuotient + 1) * 2704 + remainderQuotient * 52 + remainderRemainder);
                     x += 3;
                 }
                 else if (l == '-')
@@ -102,7 +102,6 @@ namespace Hardstuck.GuildWars2.Builds
                     result.Add(AlphaToInt(letters[x]));
                 }
             }
-
             return result.ToArray();
         }
 
