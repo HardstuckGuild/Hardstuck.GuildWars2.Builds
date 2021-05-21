@@ -269,6 +269,13 @@ namespace Hardstuck.GuildWars2.Builds
 
                 var weapons = new List<APIClasses.CharacterEquipment>() { weaponA1, weaponA2, weaponB1, weaponB2 };
 
+                if (APIBuild.ProfessionData.Name == "Elementalist" || APIBuild.ProfessionData.Name == "Engineer")
+                {
+                    //remove the second weapon set if it exists because we only have one set
+                    weapons[2] = null;
+                    weapons[3] = null;
+                }
+
                 StringBuilder weaponQuery = new StringBuilder("ids=");
 
                 for (int x = 0; x < weapons.Count; x++)
@@ -430,9 +437,12 @@ namespace Hardstuck.GuildWars2.Builds
                         else
                         {
                             APIBuildWeapon weapon = equipment.Weapons[Weapons.IndexOf(item.Slot)];
-                            weapon.Slot = item.Slot;
-                            weapon.AttributeType = item.AttributeType;
-                            weapon.Upgrades = item.Upgrades;
+                            if (weapon != null)
+                            {
+                                weapon.Slot = item.Slot;
+                                weapon.AttributeType = item.AttributeType;
+                                weapon.Upgrades = item.Upgrades;
+                            }
                         }
                     }
                 }
