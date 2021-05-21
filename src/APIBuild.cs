@@ -52,26 +52,19 @@ namespace Hardstuck.GuildWars2.Builds
         {
             string result = "";
             for (int x = 0; x < stuff.Length; x++)
-            {
-                if (stuff[x] > 2652)
+                if (stuff[x] > 2601)
                 {
-                    int squaredQuotient = Math.DivRem(stuff[x] - 2653, 2653, out int squaredRemainder);
-                    int remainderQuotient = Math.DivRem(squaredRemainder - 52, 52, out int remainderRemainder);
+                    int squaredQuotient = Math.DivRem(stuff[x] - 2602, 2602, out int squaredRemainder);
+                    int remainderQuotient = Math.DivRem(squaredRemainder, 52, out int remainderRemainder);
                     result += "_" + Letterize(new int[] { squaredQuotient, remainderQuotient, remainderRemainder });
                 }
                 else if (stuff[x] > 51)
-                {
                     result += "-" + Letterize(new int[] { (int)Math.Floor((stuff[x] - 52) / 52d), stuff[x] % 52 });
-                }
                 else if (stuff[x] > 25)
-                {
                     result += ((char)(65 + stuff[x] - 26)).ToString();
-                }
                 else
-                {
                     result += ((char)(97 + stuff[x])).ToString();
-                }
-            }
+
             return result;
         }
 
@@ -91,17 +84,17 @@ namespace Hardstuck.GuildWars2.Builds
                 char l = letters[x];
                 if (l == '_')
                 {
-                    int squaredQuotient = AlphaToInt(letters[x + 1]);
-                    int remainderQuotient = AlphaToInt(letters[x + 2]);
+                    int squaredQuotient    = AlphaToInt(letters[x + 1]);
+                    int remainderQuotient  = AlphaToInt(letters[x + 2]);
                     int remainderRemainder = AlphaToInt(letters[x + 3]);
-                    result.Add((squaredQuotient + 1) * 2653 + (remainderQuotient + 1) * 52 + remainderRemainder);
+                    result.Add((squaredQuotient + 1) * 2602 + remainderQuotient * 52 + remainderRemainder);
                     x += 3;
                 }
                 else if (l == '-')
                 {
-                    int quotient = AlphaToInt(letters[x + 1]);
+                    int quotient  = AlphaToInt(letters[x + 1]);
                     int remainder = AlphaToInt(letters[x + 2]);
-                    result.Add(quotient * 52 + remainder);
+                    result.Add((quotient + 1) * 52 + remainder);
                     x += 2;
                 }
                 else
@@ -109,6 +102,7 @@ namespace Hardstuck.GuildWars2.Builds
                     result.Add(AlphaToInt(letters[x]));
                 }
             }
+
             return result.ToArray();
         }
 
