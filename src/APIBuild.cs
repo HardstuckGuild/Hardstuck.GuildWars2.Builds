@@ -74,7 +74,7 @@ namespace Hardstuck.GuildWars2.Builds
             return (result < 0) ? result + 58 : result;
         }
 
-        public static int[] Deletterize(string code)
+        internal static int[] Deletterize(string code)
         {
             List<int> result = new List<int>();
             char[] letters = code.ToCharArray();
