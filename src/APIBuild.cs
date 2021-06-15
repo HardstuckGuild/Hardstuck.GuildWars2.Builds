@@ -250,5 +250,11 @@ namespace Hardstuck.GuildWars2.Builds
 
             return Letterize(relativeIds.ToArray());
         }
+
+        /// <summary>
+        /// Get the build code link for the build
+        /// </summary>
+        /// <returns>Builds.Hardstuck.GG link with the build code</returns>
+        public string GetBuildLink() => $"https://builds.hardstuck.gg/?build={GetBuildCode()}";
     }
 }
