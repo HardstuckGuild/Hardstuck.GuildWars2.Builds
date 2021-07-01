@@ -29,8 +29,8 @@ try
 {
     using (GW2BuildParser parser = new GW2BuildParser("My API key"))
     {
-        APIBuild build = await parser.GetAPIBuildAsync("My Amazing Character", GW2GameMode.PvE);
         Console.WriteLine(build.GetBuildCode());
+        APIBuild build = await parser.GetAPIBuildAsync("My Amazing Character", GameMode.PvE);
     }
 }
 catch (NotEnoughPermissionsException e)
@@ -60,7 +60,7 @@ Additionally, `GW2BuildParser` can throw an exception of type `NotEnoughPermissi
 ### Example method to extract the build code with `using` statement:
 
 ```csharp
-private async Task<string> GetBuildAsync(string apiKey, string characterName, GW2GameMode gameMode)
+private async Task<string> GetBuildLinkAsync(string apiKey, string characterName, GameMode gameMode)
 {
     try
     {
@@ -80,7 +80,7 @@ private async Task<string> GetBuildAsync(string apiKey, string characterName, GW
 ### Alternative way with `Dispose()`:
 
 ```csharp
-private async Task<string> GetBuildAsync(string apiKey, string characterName, GW2GameMode gameMode)
+private async Task<string> GetBuildLinkAsync(string apiKey, string characterName, GameMode gameMode)
 {
     try
     {

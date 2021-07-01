@@ -38,7 +38,7 @@ namespace Hardstuck.GuildWars2.Builds
         /// <param name="characterName">name of the character</param>
         /// <param name="mode">given game mode</param>
         /// <returns>information about the exact build a given character in a given game mode</returns>
-        public async Task<APIBuild> GetAPIBuildAsync(string characterName, GW2GameMode mode)
+        public async Task<APIBuild> GetAPIBuildAsync(string characterName, GameMode mode)
         {
             APIBuild APIBuild = new APIBuild()
             {
@@ -46,7 +46,7 @@ namespace Hardstuck.GuildWars2.Builds
                 GameMode = mode
             };
 
-            string modestring = Enum.GetName(typeof(GW2GameMode), mode).ToLower();
+            string modestring = Enum.GetName(typeof(GameMode), mode).ToLower();
 
             APIClasses.Character APIData = await api.Request<APIClasses.Character>($"v2/characters/{characterName}");
             List<APIClasses.CharacterSpecialization> specializations = APIData.Specializations[modestring];
@@ -103,7 +103,7 @@ namespace Hardstuck.GuildWars2.Builds
                 }
             }
 
-            APIBuild.ProfessionData = await api.Request<Profession>($"v2/professions/{APIData.Profession}");
+            APIBuild.ProfessionData = await api.Request<Tools.Profession>($"v2/professions/{APIData.Profession}");
             APIBuild.Profession = APIBuild.ProfessionData.Name;
             APIBuild.ProfessionData.RelativeId = allProfessions.IndexOf(APIBuild.ProfessionData.Name);
 
@@ -231,7 +231,7 @@ namespace Hardstuck.GuildWars2.Builds
                 });
             }
 
-            if (mode == GW2GameMode.PvP)
+            if (mode == GameMode.PvP)
             {
                 APIClasses.CharacterEquipmentPvP apiEquipmentPvP = APIData.EquipmentPvP;
                 APIBuildPvPEquipment equipment = new APIBuildPvPEquipment

@@ -1,5 +1,4 @@
-﻿using Hardstuck.GuildWars2.Builds.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Hardstuck.GuildWars2.Builds
@@ -17,7 +16,7 @@ namespace Hardstuck.GuildWars2.Builds
         /// <summary>
         /// Game mode of the build
         /// </summary>
-        public GW2GameMode GameMode { get; set; }
+        public GameMode GameMode { get; set; }
 
         /// <summary>
         /// Profession name
@@ -44,7 +43,7 @@ namespace Hardstuck.GuildWars2.Builds
         /// </summary>
         public APIBuildEquipment Equipment { get; set; } = new APIBuildEquipment();
 
-        internal Profession ProfessionData { get; set; }
+        internal Tools.Profession ProfessionData { get; set; }
 
         internal APIBuild() { }
 
