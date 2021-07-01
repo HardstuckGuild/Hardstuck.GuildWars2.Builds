@@ -496,16 +496,16 @@ namespace Hardstuck.GuildWars2.Builds
                     }
                 }
 
-                if (APIBuild.ProfessionData.Name == "Ranger")
-                {
-                    //pet
-                    for (int p = 0; p < skills.Pets["terrestrial"].Count; p++)
-                    {
-                        APIBuild.Pets.Add(new APIBuildPet() { Id = skills.Pets["terrestrial"][p] });
-                    }
-                }
-
                 APIBuild.Equipment = equipment;
+            }
+
+            if (APIBuild.ProfessionData.Name == "Ranger")
+            {
+                //pet
+                for (int p = 0; p < skills.Pets["terrestrial"].Count; p++)
+                {
+                    APIBuild.Pets.Add(new APIBuildPet() { Id = skills.Pets["terrestrial"][p] });
+                }
             }
 
             return APIBuild;
