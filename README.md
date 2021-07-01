@@ -2,7 +2,7 @@
 
 [![Nuget](https://img.shields.io/nuget/v/Hardstuck.GuildWars2.Builds?style=for-the-badge)](https://www.nuget.org/packages/Hardstuck.GuildWars2.Builds/)
 
-GW2 build code generator for Hardstuck Builds.
+GW2 build code & link generator for Hardstuck Builds ([builds.hardstuck.gg](https://builds.hardstuck.gg)).
 
 Maintained by @mightyteapot & @Plenyx.
 
@@ -22,20 +22,20 @@ using Hardstuck.GuildWars2.Builds;
 
 ---
 
-### Quickly generate a build code:
+### Quickly generate a build link:
 
 ```csharp
 try
 {
     using (GW2BuildParser parser = new GW2BuildParser("My API key"))
     {
-        Console.WriteLine(build.GetBuildCode());
         APIBuild build = await parser.GetAPIBuildAsync("My Amazing Character", GameMode.PvE);
+        Console.WriteLine(build.GetBuildLink());
     }
 }
 catch (NotEnoughPermissionsException e)
 {
-    Console.Write($"The API request failed due to low API key permissions, main reason: ");
+    Console.Write("The API request failed due to low API key permissions, main reason: ");
     switch(e.MissingPermission)
     {
         case NotEnoughPermissionsReason.Characters:
@@ -57,7 +57,7 @@ Additionally, `GW2BuildParser` can throw an exception of type `NotEnoughPermissi
 
 ---
 
-### Example method to extract the build code with `using` statement:
+### Example method to extract the build link with `using` statement:
 
 ```csharp
 private async Task<string> GetBuildLinkAsync(string apiKey, string characterName, GameMode gameMode)
@@ -67,7 +67,7 @@ private async Task<string> GetBuildLinkAsync(string apiKey, string characterName
         using (GW2BuildParser parser = new GW2BuildParser(apiKey))
         {
             APIBuild build = await parser.GetAPIBuildAsync(characterName, gameMode);
-            return build.GetBuildCode();
+            return build.GetBuildLink();
         }
     }
     catch (NotEnoughPermissionsException e)
@@ -90,7 +90,7 @@ private async Task<string> GetBuildLinkAsync(string apiKey, string characterName
 
         parser.Dispose();
 
-        return build.GetBuildCode();
+        return build.GetBuildLink();
     }
     catch (NotEnoughPermissionsException e)
     {
