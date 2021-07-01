@@ -74,7 +74,7 @@ namespace Hardstuck.GuildWars2.Builds
             return (result < 0) ? result + 58 : result;
         }
 
-        public static int[] Deletterize(string code)
+        internal static int[] Deletterize(string code)
         {
             List<int> result = new List<int>();
             char[] letters = code.ToCharArray();
@@ -250,5 +250,11 @@ namespace Hardstuck.GuildWars2.Builds
 
             return Letterize(relativeIds.ToArray());
         }
+
+        /// <summary>
+        /// Get the build code link for the build
+        /// </summary>
+        /// <returns>Builds.Hardstuck.GG link with the build code</returns>
+        public string GetBuildLink() => $"https://builds.hardstuck.gg/?build={GetBuildCode()}";
     }
 }
