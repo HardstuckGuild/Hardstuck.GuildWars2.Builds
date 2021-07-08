@@ -224,6 +224,12 @@ namespace Hardstuck.GuildWars2.Builds
                     new APIBuildSkill() { Id = (int)skills.Utilities[2], RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.Where(s => s.Id.Equals(skills.Utilities[2])).FirstOrDefault()) }
                 });
 
+                if (skills.elite == null) //few missing cases, they actually fixed jaunt though because of the mes bug - neat!
+                {
+                    if (APIBuild.Profession.name == "Engineer")
+                        skills.elite = 30800;
+                }
+
                 APIBuild.Skills.Elites.Add(new APIBuildSkill()
                 {
                     Id = skills.Elite,
