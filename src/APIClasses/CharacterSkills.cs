@@ -12,7 +12,7 @@ namespace Hardstuck.GuildWars2.Builds.APIClasses
         public List<int?> Utilities { get; set; }
 
         [JsonProperty("elite")]
-        public int Elite { get; set; }
+        public int? Elite { get; set; }
 
         [JsonProperty("pets")]
         public Dictionary<string, List<int>> Pets { get; set; }
