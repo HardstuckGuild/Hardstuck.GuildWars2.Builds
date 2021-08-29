@@ -453,6 +453,20 @@ namespace Hardstuck.GuildWars2.Builds
                     }
                 }
 
+                //hack to fix empty sets, this is followed up in the parser side, if the parser notices identical weapons it flags the build with 'duplicateweaponsets'
+
+                if (equipment.Weapons[0] == null && equipment.Weapons[1] == null)
+                {
+                    equipment.Weapons[0] = equipment.Weapons[2];
+                    equipment.Weapons[1] = equipment.Weapons[3];
+                }
+
+                if (equipment.Weapons[2] == null && equipment.Weapons[3] == null)
+                {
+                    equipment.Weapons[2] = equipment.Weapons[0];
+                    equipment.Weapons[3] = equipment.Weapons[1];
+                }
+
                 string itemQuery = $"ids={string.Join(",", itemsToQuery.Values)}";
 
                 List<APIClasses.Item> loadedItems = new List<APIClasses.Item>();
