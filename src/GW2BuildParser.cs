@@ -1,5 +1,4 @@
-﻿using Hardstuck.GuildWars2.Builds.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,6 +39,8 @@ namespace Hardstuck.GuildWars2.Builds
         /// <returns>information about the exact build a given character in a given game mode</returns>
         public async Task<APIBuild> GetAPIBuildAsync(string characterName, GameMode mode)
         {
+            characterName = characterName.ToCharacterName();
+
             APIBuild APIBuild = new APIBuild()
             {
                 CharacterName = characterName,
