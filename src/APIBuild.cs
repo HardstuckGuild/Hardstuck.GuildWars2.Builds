@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Hardstuck.GuildWars2.Builds
 {
@@ -24,9 +25,9 @@ namespace Hardstuck.GuildWars2.Builds
         public string Profession { get; set; }
 
         /// <summary>
-        /// Currently equipped specializations on the character
+        /// Currently equipped specialisations on the character
         /// </summary>
-        public List<APIBuildSpecialization> Specializations { get; set; } = new List<APIBuildSpecialization>();
+        public List<APIBuildSpecialisation> Specialisations { get; set; } = new List<APIBuildSpecialisation>();
 
         /// <summary>
         /// Currently equipped skills on the character
@@ -49,22 +50,29 @@ namespace Hardstuck.GuildWars2.Builds
 
         internal static string Letterize(int[] stuff)
         {
-            string result = "";
+            StringBuilder result = new StringBuilder("");
             for (int x = 0; x < stuff.Length; x++)
+            {
                 if (stuff[x] > 2704)
                 {
                     int squaredQuotient = Math.DivRem(stuff[x] - 2704, 2704, out int squaredRemainder);
                     int remainderQuotient = Math.DivRem(squaredRemainder, 52, out int remainderRemainder);
-                    result += "_" + Letterize(new int[] { squaredQuotient, remainderQuotient, remainderRemainder });
+                    result.Append($"_{Letterize(new int[] { squaredQuotient, remainderQuotient, remainderRemainder })}");
                 }
                 else if (stuff[x] > 51)
-                    result += "-" + Letterize(new int[] { (int)Math.Floor((stuff[x] - 52) / 52d), stuff[x] % 52 });
+                {
+                    result.Append($"-{Letterize(new int[] { (int)Math.Floor((stuff[x] - 52) / 52d), stuff[x] % 52 })}");
+                }
                 else if (stuff[x] > 25)
-                    result += ((char)(65 + stuff[x] - 26)).ToString();
+                {
+                    result.Append(((char)(65 + stuff[x] - 26)).ToString());
+                }
                 else
-                    result += ((char)(97 + stuff[x])).ToString();
-
-            return result;
+                {
+                    result.Append(((char)(97 + stuff[x])).ToString());
+                }
+            }
+            return result.ToString();
         }
 
         internal static int AlphaToInt(char alpha)
@@ -116,7 +124,7 @@ namespace Hardstuck.GuildWars2.Builds
                 ProfessionData.RelativeId
             };
 
-            foreach (APIBuildSpecialization s in Specializations)
+            foreach (APIBuildSpecialisation s in Specialisations)
             {
                 relativeIds.Add(s.RelativeId);
                 foreach (APIBuildTrait t in s.Traits)
@@ -148,7 +156,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                 foreach (APIBuildWeapon w in PvEEquipment.Weapons)
                 {
-                    if (w != null)
+                    if (!(w is null))
                     {
                         relativeIds.Add(w.RelativeId);
                     }
@@ -156,9 +164,9 @@ namespace Hardstuck.GuildWars2.Builds
 
                 foreach (APIBuildItem i in PvEEquipment.AllItems)
                 {
-                    if (i != null)
+                    if (!(i is null))
                     {
-                        if (curStat == null)
+                        if (curStat is null)
                         {
                             curStat = i.AttributeType;
                             relativeIds.Add(i.AttributeType.Id);
@@ -222,7 +230,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                 foreach (APIBuildWeapon w in PvPEquipment.Weapons)
                 {
-                    if (w != null)
+                    if (!(w is null))
                     {
                         relativeIds.Add(w.RelativeId);
                     }
@@ -236,11 +244,11 @@ namespace Hardstuck.GuildWars2.Builds
                 }
             }
 
-            if (ProfessionData.Name == "Ranger")
+            if (ProfessionData.Name.Equals("Ranger"))
             {
                 for (int x = 0; x < Pets.Count; x++)
                 {
-                    if (Pets[x] != null)
+                    if (!(Pets[x] is null))
                     {
                         relativeIds.Add(Pets[x].Id);
                     }

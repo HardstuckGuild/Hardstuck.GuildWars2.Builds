@@ -3,8 +3,5 @@
     /// <summary>
     /// Generic build equipment
     /// </summary>
-    public class APIBuildEquipment
-    {
-
-    }
+    public class APIBuildEquipment { }
 }

@@ -18,7 +18,7 @@ namespace Hardstuck.GuildWars2.Builds.Tools
         public string IconBig { get; set; }
 
         [JsonProperty("specializations")]
-        internal List<int> Specializations { get; set; }
+        internal List<int> Specialisations { get; set; }
 
         [JsonProperty("weapons")]
         internal JObject Weapons { get; set; }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
-    internal class CharacterSpecialization
+    internal class CharacterSpecialisation
     {
         [JsonProperty("id")]
         public int Id { get; set; }

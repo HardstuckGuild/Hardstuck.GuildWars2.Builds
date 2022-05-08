@@ -47,10 +47,10 @@ namespace Hardstuck.GuildWars2.Builds
                 GameMode = mode
             };
 
-            string modestring = Enum.GetName(typeof(GameMode), mode).ToLower();
+            string gameModeString = Enum.GetName(typeof(GameMode), mode).ToLower();
 
             APIClasses.Character APIData = await api.Request<APIClasses.Character>($"v2/characters/{characterName}");
-            List<APIClasses.CharacterSpecialization> specializations = APIData.Specializations[modestring];
+            List<APIClasses.CharacterSpecialisation> specialisations = APIData.Specialisations[gameModeString];
 
             List<string> allProfessions = await api.Request<List<string>>("v2/professions");
 
@@ -61,7 +61,7 @@ namespace Hardstuck.GuildWars2.Builds
             int queryCounter = 0;
 
 
-            //TODO download this on launch instead of every time
+            // TODO download this on launch instead of every time
             while (statCounter < allStats.Count)
             {
                 StringBuilder statQuery = new StringBuilder("ids=");
@@ -112,21 +112,27 @@ namespace Hardstuck.GuildWars2.Builds
 
             StringBuilder traitQuery = new StringBuilder("ids=");
 
-            for (int x = 0; x < specializations.Count; x++)
+            EliteSpecialisation eliteSpec = EliteSpecialisation.None;
+
+            for (int x = 0; x < specialisations.Count; x++)
             {
-                APIBuildSpecialization spec = new APIBuildSpecialization
+                if (x == 2) // elite spec
                 {
-                    Id = specializations[x].Id,
-                    RelativeId = APIBuild.ProfessionData.Specializations.ToList().IndexOf(specializations[x].Id)
+                    eliteSpec = (EliteSpecialisation)specialisations[x].Id;
+                }
+                APIBuildSpecialisation spec = new APIBuildSpecialisation
+                {
+                    Id = specialisations[x].Id,
+                    RelativeId = APIBuild.ProfessionData.Specialisations.ToList().IndexOf(specialisations[x].Id)
                 };
-                for (int t = 0; t < specializations[x].Traits.Count; t++)
+                for (int t = 0; t < specialisations[x].Traits.Count; t++)
                 {
                     APIBuildTrait trait;
-                    if (specializations[x].Traits[t] != null)
+                    if (!(specialisations[x].Traits[t] is null))
                     {
                         trait = new APIBuildTrait
                         {
-                            Id = (int)specializations[x].Traits[t]
+                            Id = (int)specialisations[x].Traits[t]
                         };
                         traitQuery.Append($"{trait.Id},");
                     }
@@ -142,7 +148,7 @@ namespace Hardstuck.GuildWars2.Builds
                     spec.Traits.Add(trait);
                     allTraits.Add(trait);
                 }
-                APIBuild.Specializations.Add(spec);
+                APIBuild.Specialisations.Add(spec);
             }
 
             List<APIClasses.Trait> traitData = await api.Request<List<APIClasses.Trait>>("v2/traits", traitQuery.ToString());
@@ -152,28 +158,28 @@ namespace Hardstuck.GuildWars2.Builds
                 allTraits[x].Position = (TraitPosition)traitData[x].Order;
             }
 
-            APIClasses.CharacterSkills skills = APIData.Skills[modestring];
+            APIClasses.CharacterSkills skills = APIData.Skills[gameModeString];
 
-            //APIBuild.Skills.Heals     = new int[] { skills.heal };
-            //APIBuild.Skills.Utilities = new int[] { skills.utilities[0], skills.utilities[1], skills.utilities[2] };
-            //APIBuild.Skills.Elites    = new int[] { skills.elite };
+            // APIBuild.Skills.Heals     = new int[] { skills.heal };
+            // APIBuild.Skills.Utilities = new int[] { skills.utilities[0], skills.utilities[1], skills.utilities[2] };
+            // APIBuild.Skills.Elites    = new int[] { skills.elite };
 
-            //skills
+            // skills
 
+            // Water        / Legend2               -> Shiro
+            // Fire         / Legend1               -> Glint
+            // Earth        / Legend4               -> Mallyx
+            // Air          / Legend3               -> Jalis
+            // Deathshroud  / Legend6               -> Ventari
+            // null         / Legend5               -> Kalla (lol)
+            // null         / (not in API at all)   -> Vindicator (lol)
 
-            //Water / Legend2        -> Shiro
-            //Fire  / Legend1        -> Glint
-            //Earth / Legend4        -> Mallyx
-            //Air   / Legend3        -> Jalis
-            //Deathshroud / Legend6  -> Ventari
-            //null        / Legend5  -> Kalla (lol) rev
-
-            if (APIBuild.ProfessionData.Name == "Revenant")
+            if (APIBuild.ProfessionData.Name.Equals("Revenant"))
             {
                 StringBuilder legendQuery = new StringBuilder("ids=");
                 for (int l = 0; l < skills.Legends.Count; l++)
                 {
-                    APIBuildRevenantLegend legend = APIBuildRevenantLegend.Parse(skills.Legends[l].ToString());
+                    APIBuildRevenantLegend legend = APIBuildRevenantLegend.Parse(skills.Legends[l].ToString(), eliteSpec);
                     legendQuery.Append($"{legend.Name},");
                 }
 
@@ -181,7 +187,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                 if (skills.Legends.Count == 1)
                 {
-                    //the api is doing a thing, construct the first (currently equipped) legend from the skills.heal skills.util skills.elite stuff
+                    // the api is doing a thing, construct the first (currently equipped) legend from the skills.heal skills.util skills.elite stuff
                     legendData.Add(new APIClasses.Legend()
                     {
                         Heal      = skills.Heal,
@@ -226,9 +232,9 @@ namespace Hardstuck.GuildWars2.Builds
                 });
 
                 // few missing cases, they actually fixed jaunt though because of the mes bug - neat!
-                if (skills.Elite == null)
+                if (skills.Elite is null)
                 {
-                    if (APIBuild.Profession == "Engineer")
+                    if (APIBuild.Profession.Equals("Engineer"))
                     {
                         skills.Elite = 30800;
                     }
@@ -241,25 +247,18 @@ namespace Hardstuck.GuildWars2.Builds
                 });
             }
 
-            if (mode == GameMode.PvP)
+            if (mode.Equals(GameMode.PvP))
             {
                 APIClasses.CharacterEquipmentPvP apiEquipmentPvP = APIData.EquipmentPvP;
                 APIBuildPvPEquipment equipment = new APIBuildPvPEquipment
                 {
-                    Amulet = (apiEquipmentPvP.Amulet == null) ? 0 : (int)apiEquipmentPvP.Amulet,
-                    Rune = (apiEquipmentPvP.Rune == null) ? 0 : (int)apiEquipmentPvP.Rune
+                    Amulet = (apiEquipmentPvP.Amulet is null) ? 0 : (int)apiEquipmentPvP.Amulet,
+                    Rune = (apiEquipmentPvP.Rune is null) ? 0 : (int)apiEquipmentPvP.Rune
                 };
 
                 for (int x = 0; x < apiEquipmentPvP.Sigils.Count; x++)
                 {
-                    if (apiEquipmentPvP.Sigils[x] != null)
-                    {
-                        equipment.Sigils[x] = (int)apiEquipmentPvP.Sigils[x];
-                    }
-                    else
-                    {
-                        equipment.Sigils[x] = 0;
-                    }
+                    equipment.Sigils[x] = (apiEquipmentPvP.Sigils[x] is null) ? 0 : (int)apiEquipmentPvP.Sigils[x];
                 }
 
                 List<APIClasses.CharacterEquipment> apiEquipment = APIData.Equipment;
@@ -281,7 +280,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                 if (APIBuild.ProfessionData.Name == "Elementalist" || APIBuild.ProfessionData.Name == "Engineer")
                 {
-                    //remove the second weapon set if it exists because we only have one set
+                    // remove the second weapon set if it exists because we only have one set
                     weapons[2] = null;
                     weapons[3] = null;
                 }
@@ -290,7 +289,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                 for (int x = 0; x < weapons.Count; x++)
                 {
-                    if (weapons[x] != null)
+                    if (!(weapons[x] is null))
                     {
                         weaponQuery.Append($"{weapons[x].Id},");
                     }
@@ -300,7 +299,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                 for (int x = 0; x < weapons.Count; x++)
                 {
-                    if (weapons[x] != null)
+                    if (!(weapons[x] is null))
                     {
                         APIBuildWeapon weapon = new APIBuildWeapon();
                         var item = weaponData.Where(s => s.Id.Equals(weapons[x].Id)).FirstOrDefault();
@@ -308,11 +307,11 @@ namespace Hardstuck.GuildWars2.Builds
                         weapon.Id = item.Id;
                         weapon.Type = (WeaponType)Enum.Parse(typeof(WeaponType), item.Details.Type.ToString().Substring(0, 1).ToUpper() + item.Details.Type.ToString().ToLower().Substring(1));
 
-                        //var weaponInfo    = APIBuild.Profession.weapons[weapon.Type.ToString()];
+                        // var weaponInfo = APIBuild.Profession.weapons[weapon.Type.ToString()];
                         int wIndex = 0;
                         foreach (var w in APIBuild.ProfessionData.Weapons)
                         {
-                            if (w.Key == weapon.Type.ToString())
+                            if (w.Key.Equals(weapon.Type.ToString()))
                             {
                                 weapon.RelativeId = wIndex;
                             }
@@ -329,7 +328,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                 APIBuild.Equipment = equipment;
             }
-            else
+            else // PvE & WvW
             {
                 APIBuildPvEEquipment equipment = new APIBuildPvEEquipment();
 
@@ -354,7 +353,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                 for (int x = 0; x < weapons.Count; x++)
                 {
-                    if (weapons[x] != null)
+                    if (!(weapons[x] is null))
                     {
                         weaponQuery.Append($"{weapons[x].Id},");
                     }
@@ -364,7 +363,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                 for (int x = 0; x < weapons.Count; x++)
                 {
-                    if (weapons[x] != null)
+                    if (!(weapons[x] is null))
                     {
                         APIBuildWeapon weapon = new APIBuildWeapon();
                         var item = weaponData.Where(s => s.Id.Equals(weapons[x].Id)).FirstOrDefault();
@@ -372,11 +371,11 @@ namespace Hardstuck.GuildWars2.Builds
                         weapon.Id = item.Id;
                         weapon.Type = (WeaponType)Enum.Parse(typeof(WeaponType), item.Details.Type.ToString().Substring(0, 1).ToUpper() + item.Details.Type.ToString().ToLower().Substring(1));
 
-                        //var weaponInfo    = APIBuild.Profession.weapons[weapon.Type.ToString()];
+                        // var weaponInfo = APIBuild.Profession.weapons[weapon.Type.ToString()];
                         int wIndex = 0;
                         foreach (var w in APIBuild.ProfessionData.Weapons)
                         {
-                            if (w.Key == weapon.Type.ToString())
+                            if (w.Key.Equals(weapon.Type.ToString()))
                             {
                                 weapon.RelativeId = wIndex;
                             }
@@ -412,7 +411,7 @@ namespace Hardstuck.GuildWars2.Builds
                             .Where(s => s.Slot.Equals(apiEquipment[x].Slot))
                             .FirstOrDefault();
 
-                        if (tryFindItem != null && tryFindItem.Stats != null)
+                        if (!(tryFindItem is null) && !(tryFindItem.Stats is null))
                         {
                             string statId = tryFindItem.Stats.Id.ToString();
                             APIClasses.ItemStats statData = allStatData.FirstOrDefault(s => s.Id.ToString().Equals(tryFindItem.Stats.Id.ToString()));
@@ -429,7 +428,7 @@ namespace Hardstuck.GuildWars2.Builds
                             itemsToQuery.Add(x, item.Id.ToString());
                         }
 
-                        if (apiEquipment[x].Upgrades != null)
+                        if (!(apiEquipment[x].Upgrades is null))
                         {
                             item.Upgrades = apiEquipment[x].Upgrades.ToArray();
                         }
@@ -447,7 +446,7 @@ namespace Hardstuck.GuildWars2.Builds
                         else
                         {
                             APIBuildWeapon weapon = equipment.Weapons[Weapons.IndexOf(item.Slot)];
-                            if (weapon != null)
+                            if (!(weapon is null))
                             {
                                 weapon.Slot = item.Slot;
                                 weapon.AttributeType = item.AttributeType;
@@ -457,28 +456,28 @@ namespace Hardstuck.GuildWars2.Builds
                     }
                 }
 
-                //hack to fix empty sets, this is followed up in the parser side, if the parser notices identical weapons it flags the build with 'duplicateweaponsets'
-                if (APIBuild.Profession != "Engineer" && APIBuild.Profession != "Elementalist") //hack because of a previous hack, this whole thing officially probably needs a rewrite down the line, jank central has arrived
+                // hack to fix empty sets, this is followed up in the parser side, if the parser notices identical weapons it flags the build with 'duplicateweaponsets'
+                if ((!APIBuild.Profession.Equals("Engineer")) && (!APIBuild.Profession.Equals("Elementalist"))) // hack because of a previous hack, this whole thing officially probably needs a rewrite down the line, jank central has arrived
                 {
-                    if (equipment.Weapons[0] == null && equipment.Weapons[1] == null)
+                    if (equipment.Weapons[0] is null && equipment.Weapons[1] is null)
                     {
                         equipment.Weapons[0] = equipment.Weapons[2];
                         equipment.Weapons[1] = equipment.Weapons[3];
                     }
 
-                    if (equipment.Weapons[2] == null && equipment.Weapons[3] == null)
+                    if (equipment.Weapons[2] is null && equipment.Weapons[3] is null)
                     {
                         equipment.Weapons[2] = equipment.Weapons[0];
                         equipment.Weapons[3] = equipment.Weapons[1];
                     }
 
-                    if (equipment.Weapons[1] == null && equipment.Weapons[2] == null)
+                    if (equipment.Weapons[1] is null && equipment.Weapons[2] is null)
                     {
                         equipment.Weapons[1] = equipment.Weapons[3];
                         equipment.Weapons[2] = equipment.Weapons[0];
                     }
 
-                    if (equipment.Weapons[0] == null && equipment.Weapons[3] == null)
+                    if (equipment.Weapons[0] is null && equipment.Weapons[3] is null)
                     {
                         equipment.Weapons[0] = equipment.Weapons[2];
                         equipment.Weapons[3] = equipment.Weapons[1];
@@ -499,7 +498,7 @@ namespace Hardstuck.GuildWars2.Builds
                     foreach (APIBuildItem item in items)
                     {
                         var itemData = loadedItems.Where(s => s.Id.Equals(item.Id)).FirstOrDefault();
-                        if (itemData.Details.InfixUpgrade != null)
+                        if (!(itemData.Details.InfixUpgrade is null))
                         {
                             item.AttributeType = new AttributeType
                             {
@@ -520,7 +519,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                 foreach (APIBuildItem i in equipment.Armor)
                 {
-                    if (i != null && i.Upgrades.Length > 0)
+                    if (!(i is null) && (i.Upgrades.Length > 0))
                     {
                         equipment.Runes.Add(i.Upgrades[0]);
                     }
@@ -528,7 +527,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                 foreach (APIBuildItem i in equipment.Weapons)
                 {
-                    if (i != null && i.Upgrades.Length > 0)
+                    if (!(i is null) && (i.Upgrades.Length > 0))
                     {
                         equipment.Sigils.AddRange(i.Upgrades);
                     }
@@ -537,9 +536,9 @@ namespace Hardstuck.GuildWars2.Builds
                 APIBuild.Equipment = equipment;
             }
 
-            if (APIBuild.ProfessionData.Name == "Ranger")
+            if (APIBuild.ProfessionData.Name.Equals("Ranger"))
             {
-                //pet
+                // pet
                 for (int p = 0; p < skills.Pets["terrestrial"].Count; p++)
                 {
                     APIBuild.Pets.Add(new APIBuildPet() { Id = skills.Pets["terrestrial"][p] });

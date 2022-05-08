@@ -30,7 +30,7 @@ namespace Hardstuck.GuildWars2.Builds
             if (checkPerms)
             {
                 APIClasses.TokenInfo tokenInfo = Request<APIClasses.TokenInfo>("v2/tokeninfo").Result;
-                if (tokenInfo == null)
+                if (tokenInfo is null)
                 {
                     throw new NotEnoughPermissionsException("API key is invalid.", NotEnoughPermissionsReason.Invalid);
                 }

@@ -3,17 +3,17 @@
 namespace Hardstuck.GuildWars2.Builds
 {
     /// <summary>
-    /// Build specialization
+    /// Build specialisation
     /// </summary>
-    public class APIBuildSpecialization
+    public class APIBuildSpecialisation
     {
         /// <summary>
-        /// Id of the specialization
+        /// Id of the specialisation
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Relative Id of the specialization
+        /// Relative Id of the specialisation
         /// </summary>
         public int RelativeId { get; set; }
 

@@ -24,32 +24,46 @@ namespace Hardstuck.GuildWars2.Builds
         /// </summary>
         public string Name { get; private set; }
 
-        //Water / Legend2        -> Shiro
-        //Fire  / Legend1        -> Glint
-        //Earth / Legend4        -> Mallyx
-        //Air   / Legend3        -> Jalis
-        //Deathshroud / Legend6  -> Ventari
-        //null        / Legend5  -> Kalla (lol) rev
+        internal APIBuildRevenantLegend() { }
+
+        // Water        / Legend2               -> Shiro
+        // Fire         / Legend1               -> Glint
+        // Earth        / Legend4               -> Mallyx
+        // Air          / Legend3               -> Jalis
+        // Deathshroud  / Legend6               -> Ventari
+        // null         / Legend5               -> Kalla (lol)
+        // null         / (not in API at all)   -> Vindicator (lol)
 
         private readonly static Dictionary<object, Tuple<string, int>> LegendDictionary = new Dictionary<object, Tuple<string, int>>()
         {
-            { "Fire"       , new Tuple<string, int>("Legend1", 1) },
-            { "Water"      , new Tuple<string, int>("Legend2", 2) },
-            { "Air"        , new Tuple<string, int>("Legend3", 3) },
-            { "Earth"      , new Tuple<string, int>("Legend4", 4) },
-            { "Kalla"      , new Tuple<string, int>("Legend5", 5) },
-            { "Deathshroud", new Tuple<string, int>("Legend6", 6) }
+            { "Fire"        , new Tuple<string, int>("Legend1", 1) },
+            { "Water"       , new Tuple<string, int>("Legend2", 2) },
+            { "Air"         , new Tuple<string, int>("Legend3", 3) },
+            { "Earth"       , new Tuple<string, int>("Legend4", 4) },
+            { "Kalla"       , new Tuple<string, int>("Legend5", 5) },
+            { "Deathshroud" , new Tuple<string, int>("Legend6", 6) },
+            { "Alliance"    , new Tuple<string, int>("Legend7", 7) },
         };
 
         /// <summary>
         /// Parse a text input representing a revenant legend
         /// </summary>
         /// <param name="input">an input representing a revenant legend</param>
+        /// <param name="eliteSpec">an input representing currently equipped elite specialisation</param>
         /// <returns>parsed revenant legend</returns>
-        public static APIBuildRevenantLegend Parse(string input)
+        public static APIBuildRevenantLegend Parse(string input, EliteSpecialisation eliteSpec)
         {
-            if (input == null)
-                input = "Kalla";
+            if (input is null)
+            {
+                if (eliteSpec.Equals(EliteSpecialisation.Renegade))
+                {
+                    input = "Kalla";
+                }
+                else if (eliteSpec.Equals(EliteSpecialisation.Vindicator))
+                {
+                    input = "Alliance";
+                }
+            }
 
             if (int.TryParse(input, out int legendId))
             {
@@ -77,11 +91,6 @@ namespace Hardstuck.GuildWars2.Builds
             }
 
             return null;
-        }
-
-        internal APIBuildRevenantLegend()
-        {
-
         }
     }
 }

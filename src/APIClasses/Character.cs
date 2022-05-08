@@ -21,6 +21,6 @@ namespace Hardstuck.GuildWars2.Builds.APIClasses
         public CharacterEquipmentPvP EquipmentPvP { get; set; }
 
         [JsonProperty("specializations")]
-        public Dictionary<string, List<CharacterSpecialization>> Specializations { get; set; }
+        public Dictionary<string, List<CharacterSpecialisation>> Specialisations { get; set; }
     }
 }
