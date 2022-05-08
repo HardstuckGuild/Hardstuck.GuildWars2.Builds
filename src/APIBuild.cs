@@ -253,7 +253,7 @@ namespace Hardstuck.GuildWars2.Builds
         /// <summary>
         /// Get the build code link for the build
         /// </summary>
-        /// <returns>Builds.Hardstuck.GG link with the build code</returns>
-        public string GetBuildLink() => $"https://builds.hardstuck.gg/?build={GetBuildCode()}";
+        /// <returns>Hardstuck.GG/GW2/Builds link with the build code</returns>
+        public string GetBuildLink() => $"https://hardstuck.gg/gw2/builds/?build={GetBuildCode()}";
     }
 }
