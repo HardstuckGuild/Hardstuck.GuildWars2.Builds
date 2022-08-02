@@ -48,6 +48,8 @@ namespace Hardstuck.GuildWars2.Builds
 
         internal APIBuild() { }
 
+        internal static char emptySlot = '0';
+
         internal static string Letterize(int[] stuff)
         {
             StringBuilder result = new StringBuilder("");
@@ -66,6 +68,10 @@ namespace Hardstuck.GuildWars2.Builds
                 else if (stuff[x] > 25)
                 {
                     result.Append(((char)(65 + stuff[x] - 26)).ToString());
+                }
+                else if (stuff[x] < 0)
+                {
+                    result.Append(emptySlot);
                 }
                 else
                 {
@@ -103,6 +109,10 @@ namespace Hardstuck.GuildWars2.Builds
                     int remainder = AlphaToInt(letters[x + 2]);
                     result.Add((quotient + 1) * 52 + remainder);
                     x += 2;
+                }
+                else if (l == emptySlot)
+                {
+                    result.Add(-1);
                 }
                 else
                 {
@@ -143,6 +153,15 @@ namespace Hardstuck.GuildWars2.Builds
                 relativeIds.Add(s.RelativeId);
             }
 
+            int fill = 3 - Skills.Utilities.Count;
+            if (fill > 0) //rev will never have this problem and fill will always be -3 on rev, so skip it
+            {
+                for (int f = 0;f < fill;f++)
+                {
+                    relativeIds.Add(-1);
+                }
+            }
+
             foreach (APIBuildSkill s in Skills.Elites)
             {
                 relativeIds.Add(s.RelativeId);
@@ -152,13 +171,17 @@ namespace Hardstuck.GuildWars2.Builds
             {
                 APIBuildPvEEquipment PvEEquipment = Equipment as APIBuildPvEEquipment;
                 AttributeType curStat = null;
-                int curStatCounter = 0;
+                int curStatCounter    = 0;
 
                 foreach (APIBuildWeapon w in PvEEquipment.Weapons)
                 {
                     if (!(w is null))
                     {
                         relativeIds.Add(w.RelativeId);
+                    }
+                    else
+                    {
+                        relativeIds.Add(-1);
                     }
                 }
 

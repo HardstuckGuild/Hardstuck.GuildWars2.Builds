@@ -27,4 +27,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Hardstuck.GuildWars2\Hardstuck.GuildWars2.csproj" />
+  </ItemGroup>
+
 </Project>

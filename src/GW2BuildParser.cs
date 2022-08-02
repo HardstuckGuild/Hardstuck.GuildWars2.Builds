@@ -57,7 +57,7 @@ namespace Hardstuck.GuildWars2.Builds
             List<int> allStats = await api.Request<List<int>>("v2/itemstats");
             List<APIClasses.ItemStats> allStatData = new List<APIClasses.ItemStats>();
 
-            int statCounter = 0;
+            int statCounter  = 0;
             int queryCounter = 0;
 
 
@@ -278,12 +278,16 @@ namespace Hardstuck.GuildWars2.Builds
 
                 var weapons = new List<APIClasses.CharacterEquipment>() { weaponA1, weaponA2, weaponB1, weaponB2 };
 
+                
+                /*
                 if (APIBuild.ProfessionData.Name == "Elementalist" || APIBuild.ProfessionData.Name == "Engineer")
                 {
                     // remove the second weapon set if it exists because we only have one set
                     weapons[2] = null;
                     weapons[3] = null;
                 }
+                We're not doing that any more
+                */
 
                 StringBuilder weaponQuery = new StringBuilder("ids=");
 
@@ -457,7 +461,7 @@ namespace Hardstuck.GuildWars2.Builds
                 }
 
                 // hack to fix empty sets, this is followed up in the parser side, if the parser notices identical weapons it flags the build with 'duplicateweaponsets'
-                if ((!APIBuild.Profession.Equals("Engineer")) && (!APIBuild.Profession.Equals("Elementalist"))) // hack because of a previous hack, this whole thing officially probably needs a rewrite down the line, jank central has arrived
+                /*if ((!APIBuild.Profession.Equals("Engineer")) && (!APIBuild.Profession.Equals("Elementalist"))) // hack because of a previous hack, this whole thing officially probably needs a rewrite down the line, jank central has arrived
                 {
                     if (equipment.Weapons[0] is null && equipment.Weapons[1] is null)
                     {
@@ -482,7 +486,7 @@ namespace Hardstuck.GuildWars2.Builds
                         equipment.Weapons[0] = equipment.Weapons[2];
                         equipment.Weapons[3] = equipment.Weapons[1];
                     }
-                }
+                }*/
 
                 string itemQuery = $"ids={string.Join(",", itemsToQuery.Values)}";
 
