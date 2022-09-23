@@ -50,42 +50,39 @@ namespace Hardstuck.GuildWars2.Builds
 
         internal static char emptySlot = '0';
 
-        internal static string Letterize(int[] stuff)
+        internal static string Letterize(int[] relativeIds)
         {
-            StringBuilder result = new StringBuilder("");
-            for (int x = 0; x < stuff.Length; x++)
+            StringBuilder result = new StringBuilder();
+            for (int x = 0; x < relativeIds.Length; x++)
             {
-                if (stuff[x] > 2704)
+                int relativeId = relativeIds[x];
+                if (relativeId > 2704)
                 {
-                    int squaredQuotient = Math.DivRem(stuff[x] - 2704, 2704, out int squaredRemainder);
+                    int squaredQuotient = Math.DivRem(relativeId - 2704, 2704, out int squaredRemainder);
                     int remainderQuotient = Math.DivRem(squaredRemainder, 52, out int remainderRemainder);
                     result.Append($"_{Letterize(new int[] { squaredQuotient, remainderQuotient, remainderRemainder })}");
                 }
-                else if (stuff[x] > 51)
+                else if (relativeId > 51)
                 {
-                    result.Append($"-{Letterize(new int[] { (int)Math.Floor((stuff[x] - 52) / 52d), stuff[x] % 52 })}");
+                    result.Append($"-{Letterize(new int[] { (int)Math.Floor((relativeId - 52) / 52d), relativeId % 52 })}");
                 }
-                else if (stuff[x] > 25)
+                else if (relativeId > 25)
                 {
-                    result.Append(((char)(65 + stuff[x] - 26)).ToString());
+                    result.Append(((char)(65 + relativeId - 26)).ToString());
                 }
-                else if (stuff[x] < 0)
+                else if (relativeId < 0)
                 {
                     result.Append(emptySlot);
                 }
                 else
                 {
-                    result.Append(((char)(97 + stuff[x])).ToString());
+                    result.Append(((char)(97 + relativeId)).ToString());
                 }
             }
             return result.ToString();
         }
 
-        internal static int AlphaToInt(char alpha)
-        {
-            int result = alpha - 97;
-            return (result < 0) ? result + 58 : result;
-        }
+        internal static int AlphaToInt(char alpha) => alpha - ((alpha < 97) ? 39 : 97);
 
         internal static int[] Deletterize(string code)
         {
@@ -97,15 +94,15 @@ namespace Hardstuck.GuildWars2.Builds
                 char l = letters[x];
                 if (l == '_')
                 {
-                    int squaredQuotient    = AlphaToInt(letters[x + 1]);
-                    int remainderQuotient  = AlphaToInt(letters[x + 2]);
+                    int squaredQuotient = AlphaToInt(letters[x + 1]);
+                    int remainderQuotient = AlphaToInt(letters[x + 2]);
                     int remainderRemainder = AlphaToInt(letters[x + 3]);
                     result.Add((squaredQuotient + 1) * 2704 + remainderQuotient * 52 + remainderRemainder);
                     x += 3;
                 }
                 else if (l == '-')
                 {
-                    int quotient  = AlphaToInt(letters[x + 1]);
+                    int quotient = AlphaToInt(letters[x + 1]);
                     int remainder = AlphaToInt(letters[x + 2]);
                     result.Add((quotient + 1) * 52 + remainder);
                     x += 2;
@@ -154,7 +151,7 @@ namespace Hardstuck.GuildWars2.Builds
             }
 
             int fill = 3 - Skills.Utilities.Count;
-            if (fill > 0) //rev will never have this problem and fill will always be -3 on rev, so skip it
+            if (fill > 0) // rev will never have this problem and fill will always be -3 on rev, so skip it
             {
                 for (int f = 0;f < fill;f++)
                 {
@@ -167,9 +164,8 @@ namespace Hardstuck.GuildWars2.Builds
                 relativeIds.Add(s.RelativeId);
             }
 
-            if (Equipment.GetType() == typeof(APIBuildPvEEquipment))
+            if (Equipment is APIBuildPvEEquipment PvEEquipment)
             {
-                APIBuildPvEEquipment PvEEquipment = Equipment as APIBuildPvEEquipment;
                 AttributeType curStat = null;
                 int curStatCounter    = 0;
 
@@ -247,10 +243,8 @@ namespace Hardstuck.GuildWars2.Builds
 
                 relativeIds.AddRange(PvEEquipment.Sigils);
             }
-            else
+            else if (Equipment is APIBuildPvPEquipment PvPEquipment)
             {
-                APIBuildPvPEquipment PvPEquipment = Equipment as APIBuildPvPEquipment;
-
                 foreach (APIBuildWeapon w in PvPEquipment.Weapons)
                 {
                     if (!(w is null))
