@@ -2,15 +2,15 @@
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
-    internal class ItemStatsAttribute
+    internal sealed class ItemStatsAttribute
     {
         [JsonProperty("attribute")]
-        public string Attribute { get; set; }
+        internal string Attribute { get; set; }
 
         [JsonProperty("multiplier")]
-        public float Multiplier { get; set; }
+        internal float Multiplier { get; set; }
 
         [JsonProperty("value")]
-        public int? Value { get; set; }
+        internal int? Value { get; set; }
     }
 }

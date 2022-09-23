@@ -2,12 +2,12 @@
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
-    internal class Item
+    internal sealed class Item
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        internal int Id { get; set; }
 
         [JsonProperty("details")]
-        public ItemDetails Details { get; set; }
+        internal ItemDetails Details { get; set; }
     }
 }

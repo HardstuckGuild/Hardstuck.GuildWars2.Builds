@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
-    internal class CharacterSpecialisation
+    internal sealed class CharacterSpecialisation
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        internal int Id { get; set; }
 
         [JsonProperty("traits")]
-        public List<int?> Traits { get; set; }
+        internal List<int?> Traits { get; set; }
     }
 }

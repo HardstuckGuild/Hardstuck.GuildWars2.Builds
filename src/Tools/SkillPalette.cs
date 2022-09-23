@@ -2,7 +2,7 @@
 
 namespace Hardstuck.GuildWars2.Builds.Tools
 {
-    internal class SkillPalette
+    internal sealed class SkillPalette
     {
         private static Dictionary<int, SkillPalette> _fullPalette = null;
         public static Dictionary<int, SkillPalette> FullPalette

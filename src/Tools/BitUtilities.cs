@@ -2,7 +2,7 @@
 {
     internal static class BitUtilities
     {
-        public static bool[] ByteToBitArray(byte b)
+        internal static bool[] ByteToBitArray(byte b)
         {
             bool[] bits = new bool[8];
             for (int x = 0; x < 8; x++)
@@ -12,9 +12,9 @@
             return bits;
         }
 
-        public static int TwoBitToInt(bool bit1, bool bit2) => (bit1 ? 1 : 0) + (bit2 ? 1 : 0) * 2;
+        internal static int TwoBitToInt(bool bit1, bool bit2) => (bit1 ? 1 : 0) + (bit2 ? 1 : 0) * 2;
 
-        public static int SumBitArray(bool[] bits)
+        internal static int SumBitArray(bool[] bits)
         {
             int result = 0;
             for (int x = 0; x < bits.Length; x++)
@@ -24,6 +24,6 @@
             return result;
         }
 
-        public static int JoinBytes(byte b1, byte b2) => b1 | b2 << 8;
+        internal static int JoinBytes(byte b1, byte b2) => b1 | b2 << 8;
     }
 }

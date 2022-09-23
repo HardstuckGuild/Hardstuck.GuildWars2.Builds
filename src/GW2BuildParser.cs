@@ -11,12 +11,14 @@ namespace Hardstuck.GuildWars2.Builds
     /// </summary>
     public class GW2BuildParser : IDisposable
     {
+        #region definitions
         private readonly GW2Api api;
 
         private List<string> allProfessions = null;
         private List<int> allStats = null;
         List<APIClasses.ItemStats> allStatData = null;
         List<string> statNames = null;
+        #endregion
 
         /// <summary>
         /// Create GW2Build class with the specified API key and check for API key permissions.

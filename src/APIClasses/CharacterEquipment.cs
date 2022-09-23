@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
-    internal class CharacterEquipment
+    internal sealed class CharacterEquipment
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        internal int Id { get; set; }
 
         [JsonProperty("slot")]
-        public string Slot { get; set; }
+        internal string Slot { get; set; }
 
         [JsonProperty("stats")]
-        public CharacterEquipmentStats Stats { get; set; }
+        internal CharacterEquipmentStats Stats { get; set; }
 
         [JsonProperty("upgrades")]
-        public List<int> Upgrades { get; set; }
+        internal List<int> Upgrades { get; set; }
     }
 }

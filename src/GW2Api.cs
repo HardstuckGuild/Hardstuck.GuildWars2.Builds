@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Hardstuck.GuildWars2.Builds
 {
-    internal class GW2Api : IDisposable
+    internal sealed class GW2Api : IDisposable
     {
         private string _apiKey;
         internal string ApiKey

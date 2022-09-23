@@ -4,18 +4,18 @@ using System.Collections.Generic;
 
 namespace Hardstuck.GuildWars2.Builds.Tools
 {
-    internal class Profession
+    internal sealed class Profession
     {
-        public int RelativeId { get; set; }
+        internal int RelativeId { get; set; }
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        internal string Name { get; set; }
 
         [JsonProperty("icon")]
-        public string Icon { get; set; }
+        internal string Icon { get; set; }
 
         [JsonProperty("icon_big")]
-        public string IconBig { get; set; }
+        internal string IconBig { get; set; }
 
         [JsonProperty("specializations")]
         internal List<int> Specialisations { get; set; }

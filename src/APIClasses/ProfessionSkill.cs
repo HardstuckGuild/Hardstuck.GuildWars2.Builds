@@ -2,15 +2,15 @@
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
-    internal class ProfessionSkill
+    internal sealed class ProfessionSkill
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        internal int Id { get; set; }
 
         [JsonProperty("slot")]
-        public string Slot { get; set; }
+        internal string Slot { get; set; }
 
         [JsonProperty("type")]
-        public string Type { get; set; }
+        internal string Type { get; set; }
     }
 }

@@ -2,12 +2,12 @@
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
-    internal class Trait
+    internal sealed class Trait
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        internal int Id { get; set; }
 
         [JsonProperty("order")]
-        public int Order { get; set; }
+        internal int Order { get; set; }
     }
 }

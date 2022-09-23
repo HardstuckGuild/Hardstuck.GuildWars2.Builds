@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
-    internal class CharacterEquipmentPvP
+    internal sealed class CharacterEquipmentPvP
     {
         [JsonProperty("amulet")]
-        public int? Amulet { get; set; }
+        internal int? Amulet { get; set; }
 
         [JsonProperty("rune")]
-        public int? Rune { get; set; }
+        internal int? Rune { get; set; }
 
         [JsonProperty("sigils")]
-        public List<int?> Sigils { get; set; }
+        internal List<int?> Sigils { get; set; }
     }
 }

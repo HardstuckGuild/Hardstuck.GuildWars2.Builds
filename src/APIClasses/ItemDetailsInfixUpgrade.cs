@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
-    internal class ItemDetailsInfixUpgrade
+    internal sealed class ItemDetailsInfixUpgrade
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        internal int Id { get; set; }
 
         [JsonProperty("attributes")]
-        public List<ItemDetailsInfixUpgradeAttribute> Attributes { get; set; }
+        internal List<ItemDetailsInfixUpgradeAttribute> Attributes { get; set; }
     }
 }

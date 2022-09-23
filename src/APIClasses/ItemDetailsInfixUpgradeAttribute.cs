@@ -2,12 +2,12 @@
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
-    internal class ItemDetailsInfixUpgradeAttribute
+    internal sealed class ItemDetailsInfixUpgradeAttribute
     {
         [JsonProperty("attribute")]
-        public string Attribute { get; set; }
+        internal string Attribute { get; set; }
 
         [JsonProperty("multiplier")]
-        public int Modifier { get; set; }
+        internal int Modifier { get; set; }
     }
 }
