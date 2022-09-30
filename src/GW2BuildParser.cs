@@ -12,25 +12,73 @@ namespace Hardstuck.GuildWars2.Builds
     public class GW2BuildParser : IDisposable
     {
         #region definitions
+        private static readonly HashSet<string> approvedAPIKeys = new HashSet<string>();
         private readonly GW2Api api;
 
         private List<string> allProfessions = null;
         private List<int> allStats = null;
-        List<APIClasses.ItemStats> allStatData = null;
-        List<string> statNames = null;
+        private List<APIClasses.ItemStats> allStatData = null;
+        private List<string> statNames = null;
         #endregion
 
         /// <summary>
-        /// Create GW2Build class with the specified API key and check for API key permissions.
+        /// Create GW2BuildParser class without the specified API key.
+        /// Make sure you set the key later or NoAPIKeySetException will be thrown.
+        /// </summary>
+        public GW2BuildParser()
+        {
+            api = new GW2Api();
+        }
+
+        /// <summary>
+        /// Create GW2BuildParser class with the specified API key and check for API key permissions.
         /// </summary>
         /// <param name="apiKey">API key</param>
         /// <param name="checkPerms">Whether to check perms and raise an error if the key has not enough permissions</param>
-        /// <exception cref="NotEnoughPermissionsException">Thrown when an error is raise by missing key permissions.</exception>
+        /// <exception cref="NoAPIKeySetException">Thrown when an error is raised by not supplying an API key.</exception>
+        /// <exception cref="NotEnoughPermissionsException">Thrown when an error is raised by missing API key permissions.</exception>
         public GW2BuildParser(string apiKey, bool checkPerms = true)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(apiKey))
+                {
+                    throw new NoAPIKeySetException();
+                }
+                if (approvedAPIKeys.Contains(apiKey))
+                {
+                    checkPerms = false;
+                }
                 api = new GW2Api(apiKey, checkPerms);
+                approvedAPIKeys.Add(apiKey);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Change the currently active API key.
+        /// </summary>
+        /// <param name="apiKey">API key</param>
+        /// <exception cref="NoAPIKeySetException">Thrown when an error is raised by not supplying an API key.</exception>
+        /// <exception cref="NotEnoughPermissionsException">Thrown when an error is raised by missing API key permissions.</exception>
+        public void ChangeApiKey(string apiKey)
+        {
+            try
+            {
+                bool checkPerms = true;
+                if (string.IsNullOrWhiteSpace(apiKey))
+                {
+                    throw new NoAPIKeySetException();
+                }
+                if (approvedAPIKeys.Contains(apiKey))
+                {
+                    checkPerms = false;
+                }
+                api.ChangeApiKey(apiKey, checkPerms);
+                approvedAPIKeys.Add(apiKey);
             }
             catch
             {
@@ -44,8 +92,14 @@ namespace Hardstuck.GuildWars2.Builds
         /// <param name="characterName">name of the character</param>
         /// <param name="mode">given game mode</param>
         /// <returns>information about the exact build a given character in a given game mode</returns>
+        /// <exception cref="NoAPIKeySetException">Thrown when an error is raised by not setting up API key.</exception>
         public async Task<APIBuild> GetAPIBuildAsync(string characterName, GameMode mode)
         {
+            if (!api.ApiKeySet)
+            {
+                throw new NoAPIKeySetException();
+            }
+
             characterName = characterName.ToCharacterName();
 
             APIBuild APIBuild = new APIBuild()

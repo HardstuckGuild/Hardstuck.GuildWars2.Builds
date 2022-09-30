@@ -164,7 +164,7 @@ namespace Hardstuck.GuildWars2.Builds
             int fill = 3 - Skills.Utilities.Count;
             if (fill > 0) // rev will never have this problem and fill will always be -3 on rev, so skip it
             {
-                for (int f = 0;f < fill;f++)
+                for (int f = 0; f < fill; f++)
                 {
                     relativeIds.Add(-1);
                 }
