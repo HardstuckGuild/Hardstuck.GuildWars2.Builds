@@ -22,7 +22,7 @@ namespace Hardstuck.GuildWars2.Builds
             }
         }
         private static readonly string basePoint = "https://api.guildwars2.com/";
-        private readonly HttpClient httpClient = new HttpClient();
+        private readonly HttpClient httpClient   = new HttpClient();
 
         internal GW2Api(string apiKey, bool checkPerms = true)
         {

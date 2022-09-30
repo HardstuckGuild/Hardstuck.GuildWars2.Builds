@@ -10,6 +10,16 @@ namespace Hardstuck.GuildWars2.Builds
     public class APIBuild
     {
         /// <summary>
+        /// Version of the code
+        /// </summary>
+        public int Version = 2;
+
+        /// <summary>
+        /// Char representation of the version, A = 0, B = 1, C = 2
+        /// </summary>
+        char VersionChar => (char)(65 + Version);
+
+        /// <summary>
         /// Name of the character
         /// </summary>
         public string CharacterName { get; set; }
@@ -127,6 +137,7 @@ namespace Hardstuck.GuildWars2.Builds
         {
             List<int> relativeIds = new List<int>
             {
+                VersionChar,
                 (int)GameMode,
                 ProfessionData.RelativeId
             };
