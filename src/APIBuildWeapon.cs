@@ -3,7 +3,7 @@
     /// <summary>
     /// A build weapon
     /// </summary>
-    public class APIBuildWeapon : APIBuildItem
+    public sealed class APIBuildWeapon : APIBuildItem
     {
         /// <summary>
         /// Relative id of the weapon

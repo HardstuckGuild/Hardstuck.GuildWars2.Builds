@@ -5,7 +5,7 @@ namespace Hardstuck.GuildWars2.Builds
     /// <summary>
     /// Build specialisation
     /// </summary>
-    public class APIBuildSpecialisation
+    public sealed class APIBuildSpecialisation
     {
         /// <summary>
         /// Id of the specialisation

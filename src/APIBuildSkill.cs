@@ -3,7 +3,7 @@
     /// <summary>
     /// A build skill
     /// </summary>
-    public class APIBuildSkill
+    public sealed class APIBuildSkill
     {
         /// <summary>
         /// Id of the skill

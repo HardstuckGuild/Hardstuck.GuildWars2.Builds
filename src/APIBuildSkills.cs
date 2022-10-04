@@ -5,7 +5,7 @@ namespace Hardstuck.GuildWars2.Builds
     /// <summary>
     /// Used skills in the build
     /// </summary>
-    public class APIBuildSkills
+    public sealed class APIBuildSkills
     {
         /// <summary>
         /// List of heal skills

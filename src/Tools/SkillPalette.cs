@@ -628,7 +628,7 @@ namespace Hardstuck.GuildWars2.Builds.Tools
                         { 55046, new SkillPalette() { Id = 55046, SkillName = "Glyph of the Stars", PaletteId = 4788 } },
                         { 55053, new SkillPalette() { Id = 55053, SkillName = "Hammer of Wisdom", PaletteId = 256 } },
                         { 56880, new SkillPalette() { Id = 56880, SkillName = "Pitfall", PaletteId = 340 } },
-                        { 56898, new SkillPalette() { Id = 56898, SkillName = "Thousand Needles", PaletteId = 267 } }
+                        { 56898, new SkillPalette() { Id = 56898, SkillName = "Thousand Needles", PaletteId = 267 } },
                     };
                 }
                 return _fullPalette;

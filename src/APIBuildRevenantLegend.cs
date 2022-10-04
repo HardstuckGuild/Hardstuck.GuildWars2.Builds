@@ -7,7 +7,7 @@ namespace Hardstuck.GuildWars2.Builds
     /// <summary>
     /// Revent legend in a build
     /// </summary>
-    public class APIBuildRevenantLegend
+    public sealed class APIBuildRevenantLegend
     {
         /// <summary>
         /// Id of the legend
@@ -33,7 +33,6 @@ namespace Hardstuck.GuildWars2.Builds
         // Deathshroud  / Legend6               -> Ventari
         // null         / Legend5               -> Kalla (lol)
         // null         / (not in API at all)   -> Vindicator (lol)
-
         private readonly static Dictionary<object, Tuple<string, int>> LegendDictionary = new Dictionary<object, Tuple<string, int>>()
         {
             { "Fire"        , new Tuple<string, int>("Legend1", 1) },
@@ -76,7 +75,7 @@ namespace Hardstuck.GuildWars2.Builds
                     {
                         Name = legend.Item1,
                         Id = legend.Item2,
-                        RelativeId = legend.Item2
+                        RelativeId = legend.Item2,
                     };
                 }
             }
@@ -86,7 +85,7 @@ namespace Hardstuck.GuildWars2.Builds
                 {
                     Name = legend.Item1,
                     Id = legend.Item2,
-                    RelativeId = legend.Item2
+                    RelativeId = legend.Item2,
                 };
             }
 

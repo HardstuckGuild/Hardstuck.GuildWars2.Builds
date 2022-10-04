@@ -3,7 +3,7 @@
     /// <summary>
     /// Type of an attribute
     /// </summary>
-    public class AttributeType
+    public sealed class AttributeType
     {
         /// <summary>
         /// Id of the attribute

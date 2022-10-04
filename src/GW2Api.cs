@@ -37,11 +37,11 @@ namespace Hardstuck.GuildWars2.Builds
                 {
                     throw new NotEnoughPermissionsException("API key is invalid.", NotEnoughPermissionsReason.Invalid);
                 }
-                if (!tokenInfo.Permissions.Where(x => x.Equals("characters")).Any())
+                if (!tokenInfo.Permissions.Any(x => x.Equals("characters")))
                 {
                     throw new NotEnoughPermissionsException("API key is missing \"characters\" permission.", NotEnoughPermissionsReason.Characters);
                 }
-                if (!tokenInfo.Permissions.Where(x => x.Equals("builds")).Any())
+                if (!tokenInfo.Permissions.Any(x => x.Equals("builds")))
                 {
                     throw new NotEnoughPermissionsException("API key is missing \"builds\" permission.", NotEnoughPermissionsReason.Builds);
                 }
@@ -58,11 +58,11 @@ namespace Hardstuck.GuildWars2.Builds
                 {
                     throw new NotEnoughPermissionsException("API key is invalid.", NotEnoughPermissionsReason.Invalid);
                 }
-                if (!tokenInfo.Permissions.Where(x => x.Equals("characters")).Any())
+                if (!tokenInfo.Permissions.Any(x => x.Equals("characters")))
                 {
                     throw new NotEnoughPermissionsException("API key is missing \"characters\" permission.", NotEnoughPermissionsReason.Characters);
                 }
-                if (!tokenInfo.Permissions.Where(x => x.Equals("builds")).Any())
+                if (!tokenInfo.Permissions.Any(x => x.Equals("builds")))
                 {
                     throw new NotEnoughPermissionsException("API key is missing \"builds\" permission.", NotEnoughPermissionsReason.Builds);
                 }

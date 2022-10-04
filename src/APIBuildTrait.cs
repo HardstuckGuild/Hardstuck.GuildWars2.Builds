@@ -3,7 +3,7 @@
     /// <summary>
     /// A build trait
     /// </summary>
-    public class APIBuildTrait
+    public sealed class APIBuildTrait
     {
         /// <summary>
         /// Id of the trait

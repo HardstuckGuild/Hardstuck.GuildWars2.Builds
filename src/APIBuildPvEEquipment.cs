@@ -5,7 +5,7 @@ namespace Hardstuck.GuildWars2.Builds
     /// <summary>
     /// PvE build equipment
     /// </summary>
-    public class APIBuildPvEEquipment : APIBuildEquipment
+    public sealed class APIBuildPvEEquipment : APIBuildEquipment
     {
         /// <summary>
         /// List of equipped weapons

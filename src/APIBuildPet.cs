@@ -3,7 +3,7 @@
     /// <summary>
     /// Pet selected
     /// </summary>
-    public class APIBuildPet
+    public sealed class APIBuildPet
     {
         /// <summary>
         /// Id of the pet

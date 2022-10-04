@@ -7,12 +7,12 @@ namespace Hardstuck.GuildWars2.Builds
     /// <summary>
     /// A class representing the build gathered from the API
     /// </summary>
-    public class APIBuild
+    public sealed class APIBuild
     {
         /// <summary>
         /// Version of the code
         /// </summary>
-        public int Version = 2;
+        public int Version => 2;
 
         /// <summary>
         /// Char representation of the version, A = 0, B = 1, C = 2
@@ -58,7 +58,7 @@ namespace Hardstuck.GuildWars2.Builds
 
         internal APIBuild() { }
 
-        internal static char emptySlot = '0';
+        internal const char emptySlot = '0';
 
         internal static string Letterize(int[] relativeIds)
         {
@@ -139,7 +139,7 @@ namespace Hardstuck.GuildWars2.Builds
             {
                 VersionChar,
                 (int)GameMode,
-                ProfessionData.RelativeId
+                ProfessionData.RelativeId,
             };
 
             foreach (APIBuildSpecialisation s in Specialisations)
