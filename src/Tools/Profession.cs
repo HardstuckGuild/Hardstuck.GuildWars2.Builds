@@ -1,6 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Hardstuck.GuildWars2.Builds.Tools
 {
@@ -8,22 +7,22 @@ namespace Hardstuck.GuildWars2.Builds.Tools
     {
         internal int RelativeId { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         internal string Name { get; set; }
 
-        [JsonProperty("icon")]
+        [JsonPropertyName("icon")]
         internal string Icon { get; set; }
 
-        [JsonProperty("icon_big")]
+        [JsonPropertyName("icon_big")]
         internal string IconBig { get; set; }
 
-        [JsonProperty("specializations")]
+        [JsonPropertyName("specializations")]
         internal List<int> Specialisations { get; set; }
 
-        [JsonProperty("weapons")]
-        internal JObject Weapons { get; set; }
+        [JsonPropertyName("weapons")]
+        internal Dictionary<string, object> Weapons { get; set; }
 
-        [JsonProperty("skills")]
+        [JsonPropertyName("skills")]
         internal List<APIClasses.ProfessionSkill> Skills { get; set; }
     }
 }

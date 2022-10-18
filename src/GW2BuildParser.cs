@@ -18,7 +18,7 @@ namespace Hardstuck.GuildWars2.Builds
 
         private List<string> allProfessions = null;
         private List<int> allStats = null;
-        private List<APIClasses.ItemStats> allStatData = null;
+        private List<ItemStats> allStatData = null;
         private List<string> statNames = null;
         #endregion
 
@@ -121,7 +121,7 @@ namespace Hardstuck.GuildWars2.Builds
                 {
                     StringBuilder statQuery = new StringBuilder("ids=");
 
-                    while (queryCounter < 100 && statCounter < allStats.Count)
+                    while ((queryCounter < 100) && (statCounter < allStats.Count))
                     {
                         statQuery.Append($"{allStats[statCounter]},");
 
@@ -142,7 +142,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                 for (int x = 0; x < allStats.Count; x++)
                 {
-                    if (allStatData[x].Attributes.Count < 3 || allStatData[x].Attributes[0].Multiplier.Equals(0f) || allStatData[x].Name.Equals(""))
+                    if ((allStatData[x].Attributes.Count < 3) || allStatData[x].Attributes[0].Multiplier.Equals(0f) || allStatData[x].Name.Equals(""))
                     {
                         allStats[x] = -1;
                     }
@@ -314,12 +314,13 @@ namespace Hardstuck.GuildWars2.Builds
 
                 List<CharacterEquipment> apiEquipment = APIData.Equipment;
 
-                CharacterEquipment weaponA1 = apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponA1"));
-                CharacterEquipment weaponA2 = apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponA2"));
-                CharacterEquipment weaponB1 = apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponB1"));
-                CharacterEquipment weaponB2 = apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponB2"));
-
-                List<CharacterEquipment> weapons = new List<CharacterEquipment>() { weaponA1, weaponA2, weaponB1, weaponB2 };
+                List<CharacterEquipment> weapons = new List<CharacterEquipment>()
+                {
+                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponA1")),
+                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponA2")),
+                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponB1")),
+                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponB2"))
+                };
 
                 StringBuilder weaponQuery = new StringBuilder("ids=");
 
@@ -369,12 +370,13 @@ namespace Hardstuck.GuildWars2.Builds
 
                 List<CharacterEquipment> apiEquipment = APIData.Equipment;
 
-                CharacterEquipment weaponA1 = apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponA1"));
-                CharacterEquipment weaponA2 = apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponA2"));
-                CharacterEquipment weaponB1 = apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponB1"));
-                CharacterEquipment weaponB2 = apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponB2"));
-
-                List<CharacterEquipment> weapons = new List<CharacterEquipment>() { weaponA1, weaponA2, weaponB1, weaponB2 };
+                List<CharacterEquipment> weapons = new List<CharacterEquipment>()
+                {
+                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponA1")),
+                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponA2")),
+                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponB1")),
+                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponB2"))
+                };
 
                 StringBuilder weaponQuery = new StringBuilder("ids=");
 
@@ -492,7 +494,7 @@ namespace Hardstuck.GuildWars2.Builds
                     APIBuildItem[] items = equipment.AllItems.Where(i => i?.Id.ToString() == pair.Value).ToArray();
                     foreach (APIBuildItem item in items)
                     {
-                        APIClasses.Item itemData = loadedItems.FirstOrDefault(s => s.Id.Equals(item.Id));
+                        Item itemData = loadedItems.FirstOrDefault(s => s.Id.Equals(item.Id));
                         if (!(itemData.Details.InfixUpgrade is null))
                         {
                             item.AttributeType = new AttributeType

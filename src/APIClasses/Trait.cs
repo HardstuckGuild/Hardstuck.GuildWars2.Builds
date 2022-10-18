@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
     internal sealed class Trait
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         internal int Id { get; set; }
 
-        [JsonProperty("order")]
+        [JsonPropertyName("order")]
         internal int Order { get; set; }
     }
 }

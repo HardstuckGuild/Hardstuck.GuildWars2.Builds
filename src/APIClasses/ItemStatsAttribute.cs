@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
     internal sealed class ItemStatsAttribute
     {
-        [JsonProperty("attribute")]
+        [JsonPropertyName("attribute")]
         internal string Attribute { get; set; }
 
-        [JsonProperty("multiplier")]
+        [JsonPropertyName("multiplier")]
         internal float Multiplier { get; set; }
 
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         internal int? Value { get; set; }
     }
 }

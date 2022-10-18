@@ -1,17 +1,17 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
     internal sealed class TokenInfo
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         internal string Id { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         internal string Name { get; set; }
 
-        [JsonProperty("permissions")]
+        [JsonPropertyName("permissions")]
         internal List<string> Permissions { get; set; }
     }
 }

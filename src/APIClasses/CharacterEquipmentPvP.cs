@@ -1,17 +1,17 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
     internal sealed class CharacterEquipmentPvP
     {
-        [JsonProperty("amulet")]
+        [JsonPropertyName("amulet")]
         internal int? Amulet { get; set; }
 
-        [JsonProperty("rune")]
+        [JsonPropertyName("rune")]
         internal int? Rune { get; set; }
 
-        [JsonProperty("sigils")]
+        [JsonPropertyName("sigils")]
         internal List<int?> Sigils { get; set; }
     }
 }
