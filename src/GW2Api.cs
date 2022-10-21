@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Linq;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Hardstuck.GuildWars2.Builds
@@ -22,7 +22,7 @@ namespace Hardstuck.GuildWars2.Builds
                 _apiKey = value;
             }
         }
-        internal bool ApiKeySet => string.IsNullOrWhiteSpace(ApiKey);
+        internal bool ApiKeySet => !string.IsNullOrWhiteSpace(ApiKey);
         #endregion
 
         internal GW2Api() { }
@@ -71,9 +71,9 @@ namespace Hardstuck.GuildWars2.Builds
 
         internal async Task<T> Request<T>(string endpoint, string query = "")
         {
-            using (HttpResponseMessage response = await httpClient.GetAsync($"{basePoint}{endpoint}?{query}"))
+            using (HttpResponseMessage response = await httpClient.GetAsync($"{basePoint}{endpoint}{((query != string.Empty) ? $"?{query}" : "")}"))
             {
-                return JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync());
+                return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
             }
         }
 

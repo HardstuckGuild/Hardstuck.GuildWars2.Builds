@@ -12,12 +12,12 @@ namespace Hardstuck.GuildWars2.Builds
         /// <summary>
         /// Version of the code
         /// </summary>
-        public int Version => 2;
+        public static int Version => 2;
 
         /// <summary>
-        /// Char representation of the version, A = 0, B = 1, C = 2
+        /// Char representation of the version, A = 1, B = 2, C = 3, etc.
         /// </summary>
-        char VersionChar => (char)(65 + Version);
+        public static char VersionChar => (char)(Version - 1);
 
         /// <summary>
         /// Name of the character
@@ -60,21 +60,21 @@ namespace Hardstuck.GuildWars2.Builds
 
         internal const char emptySlot = '0';
 
-        internal static string Letterize(int[] relativeIds)
+        internal static string Letterize(int?[] relativeIds)
         {
             StringBuilder result = new StringBuilder();
             for (int x = 0; x < relativeIds.Length; x++)
             {
-                int relativeId = relativeIds[x];
+                int relativeId = relativeIds[x] ?? -1;
                 if (relativeId > 2704)
                 {
                     int squaredQuotient = Math.DivRem(relativeId - 2704, 2704, out int squaredRemainder);
                     int remainderQuotient = Math.DivRem(squaredRemainder, 52, out int remainderRemainder);
-                    result.Append($"_{Letterize(new int[] { squaredQuotient, remainderQuotient, remainderRemainder })}");
+                    result.Append($"_{Letterize(new int?[] { squaredQuotient, remainderQuotient, remainderRemainder })}");
                 }
                 else if (relativeId > 51)
                 {
-                    result.Append($"-{Letterize(new int[] { (int)Math.Floor((relativeId - 52) / 52d), relativeId % 52 })}");
+                    result.Append($"-{Letterize(new int?[] { (int)Math.Floor((relativeId - 52) / 52d), relativeId % 52 })}");
                 }
                 else if (relativeId > 25)
                 {
@@ -135,7 +135,7 @@ namespace Hardstuck.GuildWars2.Builds
         /// <returns>Hardstuck Builds code</returns>
         public string GetBuildCode()
         {
-            List<int> relativeIds = new List<int>
+            List<int?> relativeIds = new List<int?>
             {
                 VersionChar,
                 (int)GameMode,
@@ -178,7 +178,7 @@ namespace Hardstuck.GuildWars2.Builds
             if (Equipment is APIBuildPvEEquipment PvEEquipment)
             {
                 AttributeType curStat = null;
-                int curStatCounter    = 0;
+                int curStatCounter = 0;
 
                 foreach (APIBuildWeapon w in PvEEquipment.Weapons)
                 {

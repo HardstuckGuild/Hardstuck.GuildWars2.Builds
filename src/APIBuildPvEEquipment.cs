@@ -25,12 +25,12 @@ namespace Hardstuck.GuildWars2.Builds
         /// <summary>
         /// List of equipped runes
         /// </summary>
-        public List<int> Runes { get; set; } = new List<int>();
+        public List<int?> Runes { get; set; } = new List<int?>();
 
         /// <summary>
         /// List of equipped sigils
         /// </summary>
-        public List<int> Sigils { get; set; } = new List<int>();
+        public List<int?> Sigils { get; set; } = new List<int?>();
 
         /// <summary>
         /// List of all items currently equipped

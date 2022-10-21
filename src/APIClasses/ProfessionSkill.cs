@@ -1,16 +1,16 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
     internal sealed class ProfessionSkill
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         internal int Id { get; set; }
 
-        [JsonPropertyName("slot")]
+        [JsonProperty("slot")]
         internal string Slot { get; set; }
 
-        [JsonPropertyName("type")]
+        [JsonProperty("type")]
         internal string Type { get; set; }
     }
 }

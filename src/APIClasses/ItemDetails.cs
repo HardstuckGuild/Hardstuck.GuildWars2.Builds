@@ -1,13 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
     internal sealed class ItemDetails
     {
-        [JsonPropertyName("type")]
+        [JsonProperty("type")]
         internal string Type { get; set; }
 
-        [JsonPropertyName("infix_upgrade")]
+        [JsonProperty("infix_upgrade")]
         internal ItemDetailsInfixUpgrade InfixUpgrade { get; set; }
     }
 }

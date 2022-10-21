@@ -13,6 +13,17 @@ namespace Hardstuck.GuildWars2.Builds
     public sealed class GW2BuildParser : IDisposable
     {
         #region definitions
+        /// <summary>
+        /// The API key used to call to GW2 API
+        /// </summary>
+        public string ApiKey
+        {
+            get => api.ApiKey;
+            set
+            {
+                ChangeApiKey(value);
+            }
+        }
         private static readonly HashSet<string> approvedAPIKeys = new HashSet<string>();
         private readonly GW2Api api;
 
@@ -109,7 +120,7 @@ namespace Hardstuck.GuildWars2.Builds
             {
                 allStats = await api.Request<List<int>>("v2/itemstats");
             }
-            
+
             if (allStatData is null)
             {
                 allStatData = new List<ItemStats>();
@@ -499,8 +510,8 @@ namespace Hardstuck.GuildWars2.Builds
                         {
                             item.AttributeType = new AttributeType
                             {
-                                Id = itemData.Details.InfixUpgrade.Id,
-                                RelativeId = allStats.IndexOf(item.AttributeType.Id),
+                                Id = (item.AttributeType is null) ? 0 : itemData.Details.InfixUpgrade.Id,
+                                RelativeId = allStats.IndexOf(item.AttributeType?.Id ?? 0),
                             };
                         }
                         else
@@ -519,6 +530,10 @@ namespace Hardstuck.GuildWars2.Builds
                     if (!(i is null) && (i.Upgrades.Length > 0))
                     {
                         equipment.Runes.Add(i.Upgrades[0]);
+                    }
+                    else if (i is null)
+                    {
+                        equipment.Runes.Add(null);
                     }
                 }
 

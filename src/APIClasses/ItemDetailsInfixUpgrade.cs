@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Hardstuck.GuildWars2.Builds.APIClasses
 {
     internal sealed class ItemDetailsInfixUpgrade
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         internal int Id { get; set; }
 
-        [JsonPropertyName("attributes")]
+        [JsonProperty("attributes")]
         internal List<ItemDetailsInfixUpgradeAttribute> Attributes { get; set; }
     }
 }
