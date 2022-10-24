@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Hardstuck.GuildWars2.Builds
@@ -60,25 +61,24 @@ namespace Hardstuck.GuildWars2.Builds
 
         internal const char emptySlot = '0';
 
-        internal static string Letterize(int?[] relativeIds)
+        internal static string Letterize(int[] relativeIds)
         {
             StringBuilder result = new StringBuilder();
-            for (int x = 0; x < relativeIds.Length; x++)
+            foreach (int relativeId in relativeIds)
             {
-                int relativeId = relativeIds[x] ?? -1;
                 if (relativeId > 2704)
                 {
                     int squaredQuotient = Math.DivRem(relativeId - 2704, 2704, out int squaredRemainder);
                     int remainderQuotient = Math.DivRem(squaredRemainder, 52, out int remainderRemainder);
-                    result.Append($"_{Letterize(new int?[] { squaredQuotient, remainderQuotient, remainderRemainder })}");
+                    result.Append($"_{Letterize(new int[] { squaredQuotient, remainderQuotient, remainderRemainder })}");
                 }
                 else if (relativeId > 51)
                 {
-                    result.Append($"-{Letterize(new int?[] { (int)Math.Floor((relativeId - 52) / 52d), relativeId % 52 })}");
+                    result.Append($"-{Letterize(new int[] { (int)Math.Floor((relativeId - 52) / 52d), relativeId % 52 })}");
                 }
                 else if (relativeId > 25)
                 {
-                    result.Append(((char)(65 + relativeId - 26)).ToString());
+                    result.Append((char)(65 + relativeId - 26));
                 }
                 else if (relativeId < 0)
                 {
@@ -86,7 +86,7 @@ namespace Hardstuck.GuildWars2.Builds
                 }
                 else
                 {
-                    result.Append(((char)(97 + relativeId)).ToString());
+                    result.Append((char)(97 + relativeId));
                 }
             }
             return result.ToString();
@@ -94,7 +94,7 @@ namespace Hardstuck.GuildWars2.Builds
 
         internal static int AlphaToInt(char alpha) => alpha - ((alpha < 97) ? 39 : 97);
 
-        internal static int[] Deletterize(string code)
+        internal static List<int> Deletterize(string code)
         {
             List<int> result = new List<int>();
             char[] letters = code.ToCharArray();
@@ -126,7 +126,7 @@ namespace Hardstuck.GuildWars2.Builds
                     result.Add(AlphaToInt(letters[x]));
                 }
             }
-            return result.ToArray();
+            return result;
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace Hardstuck.GuildWars2.Builds
         /// <returns>Hardstuck Builds code</returns>
         public string GetBuildCode()
         {
-            List<int?> relativeIds = new List<int?>
+            List<int> relativeIds = new List<int>
             {
                 VersionChar,
                 (int)GameMode,
@@ -225,12 +225,20 @@ namespace Hardstuck.GuildWars2.Builds
                 int curRune = -1;
                 int curRuneCounter = 0;
 
-                foreach (int r in PvEEquipment.Runes)
+                foreach (int? r in PvEEquipment.Runes)
                 {
+                    if (r is null)
+                    {
+                        relativeIds.Add(-1);
+                        continue;
+                    }
+
+                    int rInt = (int)r;
+
                     if (curRune == -1)
                     {
-                        curRune = r;
-                        relativeIds.Add(r);
+                        curRune = rInt;
+                        relativeIds.Add(rInt);
                     }
 
                     if (r != curRune)
@@ -241,8 +249,8 @@ namespace Hardstuck.GuildWars2.Builds
                         }
 
                         curRuneCounter = 0;
-                        relativeIds.Add(r);
-                        curRune = r;
+                        relativeIds.Add(rInt);
+                        curRune = rInt;
                     }
                     curRuneCounter++;
                 }
@@ -252,7 +260,7 @@ namespace Hardstuck.GuildWars2.Builds
                     relativeIds.Add(curRuneCounter);
                 }
 
-                relativeIds.AddRange(PvEEquipment.Sigils);
+                relativeIds.AddRange(PvEEquipment.Sigils.Select(x => x ?? -1));
             }
             else if (Equipment is APIBuildPvPEquipment PvPEquipment)
             {
