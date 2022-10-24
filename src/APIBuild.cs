@@ -70,11 +70,11 @@ namespace Hardstuck.GuildWars2.Builds
                 {
                     int squaredQuotient = Math.DivRem(relativeId - 2704, 2704, out int squaredRemainder);
                     int remainderQuotient = Math.DivRem(squaredRemainder, 52, out int remainderRemainder);
-                    result.Append($"_{Letterize(new int[] { squaredQuotient, remainderQuotient, remainderRemainder })}");
+                    result.Append('_').Append(Letterize(new int[] { squaredQuotient, remainderQuotient, remainderRemainder }));
                 }
                 else if (relativeId > 51)
                 {
-                    result.Append($"-{Letterize(new int[] { (int)Math.Floor((relativeId - 52) / 52d), relativeId % 52 })}");
+                    result.Append('-').Append(Letterize(new int[] { (int)Math.Floor((relativeId - 52) / 52d), relativeId % 52 }));
                 }
                 else if (relativeId > 25)
                 {
@@ -107,14 +107,14 @@ namespace Hardstuck.GuildWars2.Builds
                     int squaredQuotient = AlphaToInt(letters[x + 1]);
                     int remainderQuotient = AlphaToInt(letters[x + 2]);
                     int remainderRemainder = AlphaToInt(letters[x + 3]);
-                    result.Add((squaredQuotient + 1) * 2704 + remainderQuotient * 52 + remainderRemainder);
+                    result.Add(((squaredQuotient + 1) * 2704) + (remainderQuotient * 52) + remainderRemainder);
                     x += 3;
                 }
                 else if (l == '-')
                 {
                     int quotient = AlphaToInt(letters[x + 1]);
                     int remainder = AlphaToInt(letters[x + 2]);
-                    result.Add((quotient + 1) * 52 + remainder);
+                    result.Add(((quotient + 1) * 52) + remainder);
                     x += 2;
                 }
                 else if (l == emptySlot)

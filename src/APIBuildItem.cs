@@ -1,4 +1,6 @@
-﻿namespace Hardstuck.GuildWars2.Builds
+﻿using System;
+
+namespace Hardstuck.GuildWars2.Builds
 {
     /// <summary>
     /// Item equipped
@@ -23,6 +25,6 @@
         /// <summary>
         /// What upgrades are installed
         /// </summary>
-        public int?[] Upgrades { get; set; } = new int?[0];
+        public int?[] Upgrades { get; set; } = Array.Empty<int?>();
     }
 }

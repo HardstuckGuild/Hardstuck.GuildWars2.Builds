@@ -18,6 +18,6 @@
         /// <summary>
         /// Missing "builds" permission
         /// </summary>
-        Builds
+        Builds,
     }
 }

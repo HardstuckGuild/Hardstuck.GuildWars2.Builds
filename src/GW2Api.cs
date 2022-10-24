@@ -10,7 +10,7 @@ namespace Hardstuck.GuildWars2.Builds
     {
         #region definitions
         private string _apiKey = string.Empty;
-        private static readonly string basePoint = "https://api.guildwars2.com/";
+        private const string basePoint = "https://api.guildwars2.com/";
         private readonly HttpClient httpClient = new HttpClient();
 
         internal string ApiKey

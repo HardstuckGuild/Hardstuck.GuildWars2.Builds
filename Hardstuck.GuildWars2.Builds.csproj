@@ -13,9 +13,9 @@
     <PackageProjectUrl>https://github.com/HardstuckGuild/Hardstuck.GuildWars2.Builds</PackageProjectUrl>
     <Platforms>AnyCPU;x64</Platforms>
     <Description>GW2 build code generator for Hardstuck Builds (builds.hardstuck.gg).</Description>
-	<Title>Hardstuck.GuildWars2.Builds</Title>
-	<EnableNETAnalyzers>True</EnableNETAnalyzers>
-	<PackageTags>hardstuck;guildwars2;gw2;guild wars 2;guild wars 2 builds;gw2 builds</PackageTags>
+    <Title>Hardstuck.GuildWars2.Builds</Title>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <PackageTags>hardstuck;guildwars2;gw2;guild wars 2;guild wars 2 builds;gw2 builds</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

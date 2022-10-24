@@ -23,6 +23,6 @@
         /// <summary>
         /// Unselected trait
         /// </summary>
-        Unselected = 3
+        Unselected = 3,
     }
 }

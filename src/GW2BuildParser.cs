@@ -134,7 +134,7 @@ namespace Hardstuck.GuildWars2.Builds
 
                     while ((queryCounter < 100) && (statCounter < allStats.Count))
                     {
-                        statQuery.Append($"{allStats[statCounter]},");
+                        statQuery.Append(allStats[statCounter]).Append(',');
 
                         queryCounter++;
                         statCounter++;
@@ -204,7 +204,7 @@ namespace Hardstuck.GuildWars2.Builds
                         {
                             Id = (int)specialisations[x].Traits[t],
                         };
-                        traitQuery.Append($"{trait.Id},");
+                        traitQuery.Append(trait.Id).Append(',');
                     }
                     else
                     {
@@ -213,7 +213,6 @@ namespace Hardstuck.GuildWars2.Builds
                             Id = -1,
                             Position = TraitPosition.Unselected,
                         };
-
                     }
                     spec.Traits.Add(trait);
                     allTraits.Add(trait);
@@ -244,8 +243,8 @@ namespace Hardstuck.GuildWars2.Builds
                 StringBuilder legendQuery = new StringBuilder("ids=");
                 for (int l = 0; l < skills.Legends.Count; l++)
                 {
-                    APIBuildRevenantLegend legend = APIBuildRevenantLegend.Parse(skills.Legends[l].ToString(), eliteSpec);
-                    legendQuery.Append($"{legend.Name},");
+                    APIBuildRevenantLegend legend = APIBuildRevenantLegend.Parse(skills.Legends[l], eliteSpec);
+                    legendQuery.Append(legend.Name).Append(',');
                 }
 
                 List<Legend> legendData = await api.Request<List<Legend>>("v2/legends", legendQuery.ToString());
@@ -266,19 +265,19 @@ namespace Hardstuck.GuildWars2.Builds
                     APIBuild.Skills.Heals.Add(new APIBuildSkill()
                     {
                         Id = legendData[l].Heal,
-                        RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.FirstOrDefault(s => s.Id.Equals(legendData[l].Heal))),
+                        RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.Find(s => s.Id.Equals(legendData[l].Heal))),
                     });
 
                     APIBuild.Skills.Utilities.AddRange(new APIBuildSkill[] {
-                        new APIBuildSkill() { Id = legendData[l].Utilities[0], RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.FirstOrDefault(s => s.Id.Equals(legendData[l].Utilities[0]))) },
-                        new APIBuildSkill() { Id = legendData[l].Utilities[1], RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.FirstOrDefault(s => s.Id.Equals(legendData[l].Utilities[1]))) },
-                        new APIBuildSkill() { Id = legendData[l].Utilities[2], RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.FirstOrDefault(s => s.Id.Equals(legendData[l].Utilities[2]))) },
+                        new APIBuildSkill() { Id = legendData[l].Utilities[0], RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.Find(s => s.Id.Equals(legendData[l].Utilities[0]))) },
+                        new APIBuildSkill() { Id = legendData[l].Utilities[1], RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.Find(s => s.Id.Equals(legendData[l].Utilities[1]))) },
+                        new APIBuildSkill() { Id = legendData[l].Utilities[2], RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.Find(s => s.Id.Equals(legendData[l].Utilities[2]))) },
                     });
 
                     APIBuild.Skills.Elites.Add(new APIBuildSkill()
                     {
                         Id = legendData[l].Elite,
-                        RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.FirstOrDefault(s => s.Id.Equals(legendData[l].Elite))),
+                        RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.Find(s => s.Id.Equals(legendData[l].Elite))),
                     });
                 }
             }
@@ -287,13 +286,13 @@ namespace Hardstuck.GuildWars2.Builds
                 APIBuild.Skills.Heals.Add(new APIBuildSkill()
                 {
                     Id = skills.Heal,
-                    RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.FirstOrDefault(s => s.Id.Equals(skills.Heal))),
+                    RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.Find(s => s.Id.Equals(skills.Heal))),
                 });
 
                 APIBuild.Skills.Utilities.AddRange(new APIBuildSkill[] {
-                    new APIBuildSkill() { Id = (int)skills.Utilities[0], RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.FirstOrDefault(s => s.Id.Equals(skills.Utilities[0]))) },
-                    new APIBuildSkill() { Id = (int)skills.Utilities[1], RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.FirstOrDefault(s => s.Id.Equals(skills.Utilities[1]))) },
-                    new APIBuildSkill() { Id = (int)skills.Utilities[2], RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.FirstOrDefault(s => s.Id.Equals(skills.Utilities[2]))) },
+                    new APIBuildSkill() { Id = (int)skills.Utilities[0], RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.Find(s => s.Id.Equals(skills.Utilities[0]))) },
+                    new APIBuildSkill() { Id = (int)skills.Utilities[1], RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.Find(s => s.Id.Equals(skills.Utilities[1]))) },
+                    new APIBuildSkill() { Id = (int)skills.Utilities[2], RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.Find(s => s.Id.Equals(skills.Utilities[2]))) },
                 });
 
                 // few missing cases, they actually fixed jaunt though because of the mes bug - neat!
@@ -305,7 +304,7 @@ namespace Hardstuck.GuildWars2.Builds
                 APIBuild.Skills.Elites.Add(new APIBuildSkill()
                 {
                     Id = (int)skills.Elite,
-                    RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.FirstOrDefault(s => s.Id.Equals(skills.Elite))),
+                    RelativeId = APIBuild.ProfessionData.Skills.IndexOf(APIBuild.ProfessionData.Skills.Find(s => s.Id.Equals(skills.Elite))),
                 });
             }
 
@@ -327,10 +326,10 @@ namespace Hardstuck.GuildWars2.Builds
 
                 List<CharacterEquipment> weapons = new List<CharacterEquipment>()
                 {
-                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponA1")),
-                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponA2")),
-                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponB1")),
-                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponB2"))
+                    apiEquipment.Find(s => s.Slot.Equals("WeaponA1")),
+                    apiEquipment.Find(s => s.Slot.Equals("WeaponA2")),
+                    apiEquipment.Find(s => s.Slot.Equals("WeaponB1")),
+                    apiEquipment.Find(s => s.Slot.Equals("WeaponB2"))
                 };
 
                 StringBuilder weaponQuery = new StringBuilder("ids=");
@@ -339,7 +338,7 @@ namespace Hardstuck.GuildWars2.Builds
                 {
                     if (!(weapons[x] is null))
                     {
-                        weaponQuery.Append($"{weapons[x].Id},");
+                        weaponQuery.Append(weapons[x].Id).Append(',');
                     }
                 }
 
@@ -350,10 +349,10 @@ namespace Hardstuck.GuildWars2.Builds
                     if (!(weapons[x] is null))
                     {
                         APIBuildWeapon weapon = new APIBuildWeapon();
-                        Item item = weaponData.FirstOrDefault(s => s.Id.Equals(weapons[x].Id));
+                        Item item = weaponData.Find(s => s.Id.Equals(weapons[x].Id));
 
                         weapon.Id = item.Id;
-                        weapon.Type = (WeaponType)Enum.Parse(typeof(WeaponType), item.Details.Type.ToString().Substring(0, 1).ToUpper() + item.Details.Type.ToString().ToLower().Substring(1));
+                        weapon.Type = (WeaponType)Enum.Parse(typeof(WeaponType), item.Details.Type.Substring(0, 1).ToUpper() + item.Details.Type.ToLower().Substring(1));
 
                         int wIndex = 0;
                         foreach (var w in APIBuild.ProfessionData.Weapons)
@@ -383,10 +382,10 @@ namespace Hardstuck.GuildWars2.Builds
 
                 List<CharacterEquipment> weapons = new List<CharacterEquipment>()
                 {
-                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponA1")),
-                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponA2")),
-                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponB1")),
-                    apiEquipment.FirstOrDefault(s => s.Slot.Equals("WeaponB2"))
+                    apiEquipment.Find(s => s.Slot.Equals("WeaponA1")),
+                    apiEquipment.Find(s => s.Slot.Equals("WeaponA2")),
+                    apiEquipment.Find(s => s.Slot.Equals("WeaponB1")),
+                    apiEquipment.Find(s => s.Slot.Equals("WeaponB2"))
                 };
 
                 StringBuilder weaponQuery = new StringBuilder("ids=");
@@ -395,7 +394,7 @@ namespace Hardstuck.GuildWars2.Builds
                 {
                     if (!(weapons[x] is null))
                     {
-                        weaponQuery.Append($"{weapons[x].Id},");
+                        weaponQuery.Append(weapons[x].Id).Append(',');
                     }
                 }
 
@@ -406,10 +405,10 @@ namespace Hardstuck.GuildWars2.Builds
                     if (!(weapons[x] is null))
                     {
                         APIBuildWeapon weapon = new APIBuildWeapon();
-                        Item item = weaponData.FirstOrDefault(s => s.Id.Equals(weapons[x].Id));
+                        Item item = weaponData.Find(s => s.Id.Equals(weapons[x].Id));
 
                         weapon.Id = item.Id;
-                        weapon.Type = (WeaponType)Enum.Parse(typeof(WeaponType), item.Details.Type.ToString().Substring(0, 1).ToUpper() + item.Details.Type.ToString().ToLower().Substring(1));
+                        weapon.Type = (WeaponType)Enum.Parse(typeof(WeaponType), value: item.Details.Type.Substring(0, 1).ToUpper() + item.Details.Type.ToLower().Substring(1));
 
                         int wIndex = 0;
                         foreach (var w in APIBuild.ProfessionData.Weapons)
@@ -446,11 +445,11 @@ namespace Hardstuck.GuildWars2.Builds
                             Slot = apiEquipment[x].Slot,
                         };
 
-                        CharacterEquipment tryFindItem = APIData.Equipment.FirstOrDefault(s => s.Slot.Equals(apiEquipment[x].Slot));
+                        CharacterEquipment tryFindItem = APIData.Equipment.Find(s => s.Slot.Equals(apiEquipment[x].Slot));
 
                         if (!(tryFindItem is null) && !(tryFindItem.Stats is null))
                         {
-                            ItemStats statData = allStatData.FirstOrDefault(s => s.Id.ToString().Equals(tryFindItem.Stats.Id.ToString()));
+                            ItemStats statData = allStatData.Find(s => s.Id.ToString().Equals(tryFindItem.Stats.Id.ToString()));
                             item.AttributeType = new AttributeType
                             {
                                 Id = tryFindItem.Stats.Id,
@@ -505,7 +504,7 @@ namespace Hardstuck.GuildWars2.Builds
                     APIBuildItem[] items = equipment.AllItems.Where(i => i?.Id.ToString() == pair.Value).ToArray();
                     foreach (APIBuildItem item in items)
                     {
-                        Item itemData = loadedItems.FirstOrDefault(s => s.Id.Equals(item.Id));
+                        Item itemData = loadedItems.Find(s => s.Id.Equals(item.Id));
                         if (!(itemData.Details.InfixUpgrade is null))
                         {
                             item.AttributeType = new AttributeType

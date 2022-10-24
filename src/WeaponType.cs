@@ -98,6 +98,6 @@
         /// <summary>
         /// Trident
         /// </summary>
-        Trident = 18
+        Trident = 18,
     }
 }
