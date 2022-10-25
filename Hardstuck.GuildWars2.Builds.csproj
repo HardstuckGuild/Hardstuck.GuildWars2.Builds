@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hardstuck.GuildWars2" Version="1.1.2" />
+    <PackageReference Include="Hardstuck.GuildWars2" Version="1.1.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
