@@ -16,9 +16,9 @@ namespace Hardstuck.GuildWars2.Builds
         public static int Version => 2;
 
         /// <summary>
-        /// Char representation of the version, A = 1, B = 2, C = 3, etc.
+        /// Char representation of the version, a = 1, b = 2, c = 3, etc.
         /// </summary>
-        public static char VersionChar => (char)(Version - 1);
+        public static char VersionChar => (char)(Version - 2);
 
         /// <summary>
         /// Name of the character
@@ -123,7 +123,7 @@ namespace Hardstuck.GuildWars2.Builds
                 }
                 else
                 {
-                    result.Add(AlphaToInt(letters[x]));
+                    result.Add(AlphaToInt(l));
                 }
             }
             return result;
